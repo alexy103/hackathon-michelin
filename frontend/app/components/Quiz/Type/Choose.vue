@@ -1,85 +1,59 @@
-<script setup>
-import { useQuestion } from "~/composable/useQuestion";
-
+<script setup lang="ts">
 const props = defineProps({
   question: Object,
 });
 
 const emit = defineEmits(["answer"]);
-const { selectedChoice, isFlipping, selectAndValidate } = useQuestion(emit);
+
+const selectedChoice = ref<number | null>(null);
+
+function selectAndValidate(choice: number) {
+  if (selectedChoice.value !== null) return;
+
+  selectedChoice.value = choice;
+
+  setTimeout(() => {
+    emit("answer", choice);
+  }, 600);
+}
 </script>
 
 <template>
-  <div>
-    <h1 class="mb-8">{{ question.label }}</h1>
+  <div class="flex min-h-[70vh] flex-col justify-center">
+    <h1 class="mb-10 text-3xl font-bold text-white">
+      {{ question.label }}
+    </h1>
 
-    <div class="mb-10 grid grid-cols-2 grid-rows-2 gap-4">
-      <div
-        v-for="(img, index) in question.images"
-        :key="index"
-        class="flip-card aspect-square w-full transition-all duration-300"
+    <div class="flex items-center justify-center gap-8">
+      <button
+        class="transition-all duration-300"
         :class="{
-          'scale-95 opacity-50': selectedChoice && selectedChoice !== index + 1,
+          'scale-95 opacity-50':
+            selectedChoice !== null && selectedChoice !== 0,
         }"
-        @click="selectAndValidate(index + 1)"
+        @click="selectAndValidate(0)"
       >
-        <div class="flip-inner" :class="{ flipped: isFlipping }">
-          <div
-            class="flip-front rounded-xl border-4 transition-all duration-200"
-            :class="[
-              selectedChoice === index + 1
-                ? 'ring-red-bright scale-95 border-transparent shadow-xl ring-4'
-                : 'border-transparent hover:scale-105',
-            ]"
-          >
-            <img :src="img" class="h-full w-full rounded-xl object-cover" />
-          </div>
+        <img
+          :src="question.assets?.[0]"
+          alt="Pilule rouge"
+          class="h-48 w-auto object-contain"
+        />
+      </button>
 
-          <div
-            class="flip-back rounded-xl border-4 transition-all duration-200"
-            :class="[
-              selectedChoice === index + 1
-                ? 'ring-red-bright scale-95 border-transparent shadow-xl ring-4'
-                : 'border-transparent hover:scale-105',
-            ]"
-          >
-            <img
-              src="/random.jpg"
-              class="h-full w-full rounded-xl object-cover"
-            />
-          </div>
-        </div>
-      </div>
+      <button
+        class="transition-all duration-300"
+        :class="{
+          'scale-95 opacity-50':
+            selectedChoice !== null && selectedChoice !== 1,
+        }"
+        @click="selectAndValidate(1)"
+      >
+        <img
+          :src="question.assets?.[1]"
+          alt="Pilule bleue"
+          class="h-48 w-auto object-contain"
+        />
+      </button>
     </div>
   </div>
 </template>
-
-<style scoped>
-.flip-card {
-  perspective: 1000px;
-  width: 100%;
-}
-
-.flip-inner {
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.6s;
-  width: 100%;
-  height: 100%;
-}
-
-.flip-inner.flipped {
-  transform: rotateY(180deg);
-}
-
-.flip-front,
-.flip-back {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-}
-
-.flip-back {
-  transform: rotateY(180deg);
-}
-</style>

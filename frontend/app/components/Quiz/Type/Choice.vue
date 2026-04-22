@@ -1,7 +1,7 @@
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-gray-900">
+  <div class="flex min-h-screen items-center justify-center">
     <div
-      class="relative flex min-h-screen w-full max-w-[390px] flex-col bg-[#BA0B2F] px-6 py-10"
+      class="relative flex min-h-full w-full max-w-[390px] flex-col bg-[#BA0B2F] px-6 py-10"
       style="font-family: &quot;Figtree&quot;, sans-serif"
     >
       <button
@@ -24,18 +24,6 @@
 
       <h1 class="mb-4 text-2xl font-medium text-white">Étape</h1>
 
-      <div class="mb-12 flex items-center gap-3">
-        <div class="h-1 flex-1 overflow-hidden rounded-full bg-white/30">
-          <div
-            class="h-full rounded-full bg-white transition-all duration-500"
-            :style="{ width: progressWidth }"
-          />
-        </div>
-        <span class="text-sm font-medium text-white"
-          >{{ currentStep }}/{{ totalSteps }}</span
-        >
-      </div>
-
       <div class="mb-10 flex items-start gap-4">
         <span
           class="shrink-0 font-medium text-white"
@@ -54,9 +42,13 @@
           @click="toggleOption(i)"
           class="w-full rounded-lg px-6 py-5 text-sm font-semibold transition-all duration-150 active:scale-95"
           :class="
-            selectedIndexes.includes(i)
-              ? 'bg-white text-[#BA0B2F]'
-              : 'border border-white/30 bg-white/15 text-white hover:bg-white/25'
+            props.multiple
+              ? (selected as number[]).includes(i)
+                ? 'bg-white text-[#BA0B2F]'
+                : 'border border-white/30 bg-white/15 text-white hover:bg-white/25'
+              : selected === i
+                ? 'bg-white text-[#BA0B2F]'
+                : 'border border-white/30 bg-white/15 text-white hover:bg-white/25'
           "
         >
           {{ option }}
@@ -66,12 +58,20 @@
       <div class="mt-auto flex justify-end">
         <button
           @click="handleNext"
-          :disabled="selectedIndexes.length === 0"
-          class="rounded-full bg-white px-8 py-3 text-sm font-semibold text-[#191919] transition-all duration-150"
+          :disabled="
+            props.multiple
+              ? (selected as number[]).length === 0
+              : selected === null
+          "
+          class="rounded-full bg-white px-8 py-3 text-sm font-semibold text-black transition-all duration-150"
           :class="
-            selectedIndexes.length > 0
-              ? 'opacity-100 hover:bg-white/90 active:scale-95'
-              : 'cursor-not-allowed opacity-40'
+            props.multiple
+              ? (selected as number[]).length > 0
+                ? 'opacity-100 hover:bg-white/90 active:scale-95'
+                : 'cursor-not-allowed opacity-40'
+              : selected !== null
+                ? 'opacity-100 hover:bg-white/90 active:scale-95'
+                : 'cursor-not-allowed opacity-40'
           "
         >
           Suivant
@@ -89,8 +89,13 @@ const props = defineProps<{
   totalSteps: number;
   question: string;
   options: string[];
-  modelValue?: number[];
+  modelValue?: number[] | number | null;
+  multiple?: boolean;
 }>();
+
+const selected = ref<number[] | number | null>(
+  props.multiple ? (props.modelValue ?? []) : (props.modelValue ?? null),
+);
 
 const emit = defineEmits<{
   (e: "update:modelValue", value: number[]): void;
@@ -98,24 +103,29 @@ const emit = defineEmits<{
   (e: "back"): void;
 }>();
 
-const selectedIndexes = ref<number[]>(props.modelValue ?? []);
-
-const progressWidth = computed(
-  () => `${(props.currentStep / props.totalSteps) * 100}%`,
-);
-
 function toggleOption(i: number) {
-  if (selectedIndexes.value.includes(i)) {
-    selectedIndexes.value = selectedIndexes.value.filter((x) => x !== i);
+  if (props.multiple) {
+    const arr = selected.value as number[];
+
+    if (arr.includes(i)) {
+      selected.value = arr.filter((x) => x !== i);
+    } else {
+      selected.value = [...arr, i];
+    }
+
+    emit("update:modelValue", selected.value);
   } else {
-    selectedIndexes.value = [...selectedIndexes.value, i];
+    selected.value = i;
+    emit("update:modelValue", i);
   }
-  emit("update:modelValue", selectedIndexes.value);
 }
 
 function handleNext() {
-  if (selectedIndexes.value.length > 0) {
-    emit("next", selectedIndexes.value);
+  if (
+    (props.multiple && (selected.value as number[]).length > 0) ||
+    (!props.multiple && selected.value !== null)
+  ) {
+    emit("next", selected.value);
   }
 }
 </script>
