@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @theme {
-  --font-jost: "Jost", sans-serif;
-  --default-font-family: var(--font-jost);
+  --font-figtree: "Figtree", sans-serif;
+  --default-font-family: var(--font-figtree);
 
   --color-red: #ba0b2f;
   --color-red-bright: #db1a1a;
