@@ -42,14 +42,12 @@
     @back="handleBack"
   />
 
-  <div
-    v-else
-    class="min-h-screen bg-[#BA0B2F] flex flex-col items-center justify-center px-6"
-    style="font-family: 'Figtree', sans-serif;"
-  >
-    <h1 class="text-white text-2xl font-medium mb-8">Réponses collectées ✓</h1>
-    <pre class="bg-white/10 text-white text-sm rounded-xl p-4 w-full max-w-[340px] overflow-auto">{{ JSON.stringify(reponses, null, 2) }}</pre>
-  </div>
+  <Resultats
+    v-else-if="currentStep === 5"
+    @enregistrer="currentStep = 6"
+  />
+
+  <Profil v-else-if="currentStep === 6" />
 </template>
 
 <script setup lang="ts">
@@ -57,6 +55,8 @@ import { ref } from 'vue'
 import StepSlider from './components/TestPersonnalite.vue'
 import StepChoix from './components/StepChoix.vue'
 import StepMotsCaches from './components/StepMotsCaches.vue'
+import Resultats from './components/Resultats.vue'
+import Profil from './components/Profil.vue'
 
 const currentStep = ref(1)
 const budgetValue = ref(2)
