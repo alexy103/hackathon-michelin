@@ -1,5 +1,22 @@
 <script setup>
+const STEP_DURATION = 1000;
+
 const currentQuestionIndex = ref(0);
+
+const showStep = ref(true);
+const currentStepIndex = ref(0);
+
+onMounted(() => {
+  showNextStep();
+});
+
+function showNextStep() {
+  showStep.value = true;
+
+  setTimeout(() => {
+    showStep.value = false;
+  }, STEP_DURATION);
+}
 
 const questionTypes = {
   FAST: {
@@ -48,11 +65,29 @@ const questions = [
   },
 ];
 
+const steps = [
+  {
+    title: "Point de départ",
+    description: "Quelques questions pour commencer",
+    questions: [0, 1],
+  },
+  {
+    title: "Personnalité",
+    description: "On affine votre profil",
+    questions: [2],
+  },
+  {
+    title: "Réflexes",
+    description: "Vos instincts",
+    questions: [3, 4],
+  },
+];
+
 const currentQuestion = computed(() => questions[currentQuestionIndex.value]);
 const finished = computed(() => currentQuestionIndex.value >= questions.length);
 
 function verifyTimeout(answer) {
-  console.log("Réponse : " + answer);
+  console.log("Réponse :", answer);
 
   const isChoose = currentQuestion.value.type === questionTypes.CHOOSE;
   const isLast = currentQuestionIndex.value === questions.length - 1;
@@ -63,62 +98,101 @@ function verifyTimeout(answer) {
 }
 
 function nextQuestion() {
-  if (currentQuestionIndex.value < questions.length - 1) {
+  const step = steps[currentStepIndex.value];
+
+  if (currentQuestionIndex.value < step.questions.at(-1)) {
     currentQuestionIndex.value++;
   } else {
-    currentQuestionIndex.value++;
-    console.log("Fini !");
+    // fin de STEP
+    if (currentStepIndex.value < steps.length - 1) {
+      showStep.value = true;
+      currentStepIndex.value++;
+
+      currentQuestionIndex.value = steps[currentStepIndex.value].questions[0];
+
+      showNextStep();
+    } else {
+      // FIN DU QUIZ
+      currentQuestionIndex.value++;
+    }
   }
 }
 
-function restart() {
-  currentQuestionIndex.value = 0;
-}
-
 const progress = computed(() => {
-  return (currentQuestionIndex.value / (questions.length - 1)) * 100;
+  const step = steps[currentStepIndex.value];
+
+  if (!step) return 0;
+
+  const firstQuestionIndex = step.questions[0];
+  const totalQuestionsInStep = step.questions.length;
+
+  return (
+    ((currentQuestionIndex.value - firstQuestionIndex) / totalQuestionsInStep) *
+    100
+  );
+});
+
+const currentStepQuestionNumber = computed(() => {
+  const step = steps[currentStepIndex.value];
+
+  if (!step) return 0;
+
+  return currentQuestionIndex.value - step.questions[0] + 1;
+});
+
+const totalStepQuestions = computed(() => {
+  const step = steps[currentStepIndex.value];
+
+  if (!step) return 0;
+
+  return step.questions.length;
 });
 </script>
-
 <template>
-  <div v-if="!finished" class="mb-4 flex items-center gap-4">
-    <div class="h-2 w-full overflow-hidden rounded bg-gray-200">
-      <div
-        class="h-full bg-black transition-all duration-500 ease-out"
-        :style="{ width: progress + '%' }"
-      />
+  <div class="p-4">
+    <div v-if="!finished && !showStep" class="mb-4 flex items-center gap-4">
+      <div class="h-2 w-full overflow-hidden rounded bg-gray-200">
+        <div
+          class="h-full bg-black transition-all duration-500 ease-out"
+          :style="{ width: progress + '%' }"
+        />
+      </div>
+      <p class="inline w-fit shrink-0">
+        {{ currentStepQuestionNumber }} / {{ totalStepQuestions }}
+      </p>
     </div>
-    <p class="inline w-fit shrink-0">
-      {{ currentQuestionIndex + 1 }} / {{ questions.length }}
-    </p>
+
+    <QuizStep
+      v-if="showStep && !finished"
+      :step="currentStepIndex + 1"
+      :label="steps[currentStepIndex]?.title"
+    />
+
+    <Transition name="slide" mode="out-in">
+      <div v-if="!showStep && !finished">
+        <QuizTypeFast
+          v-if="currentQuestion.type === questionTypes.FAST"
+          :key="currentQuestion.id"
+          :question="currentQuestion"
+          @answer="verifyTimeout"
+        />
+
+        <QuizTypeSwipe
+          v-else-if="currentQuestion.type === questionTypes.SWIPE"
+          :key="currentQuestion.id"
+          :question="currentQuestion"
+          @answer="verifyTimeout"
+        />
+
+        <QuizTypeChoose
+          v-else-if="currentQuestion.type === questionTypes.CHOOSE"
+          :key="currentQuestion.id"
+          :question="currentQuestion"
+          @answer="verifyTimeout"
+        />
+      </div>
+    </Transition>
   </div>
-  <button
-    class="mx-auto mb-5 block rounded bg-black px-4 py-2 text-white disabled:opacity-50"
-    @click="restart"
-  >
-    Recommencer
-  </button>
-  <Transition name="slide" mode="out-in">
-    <QuizTypeFast
-      v-if="!finished && currentQuestion.type === questionTypes.FAST"
-      :key="currentQuestion.id"
-      :question="currentQuestion"
-      @answer="verifyTimeout"
-    />
-
-    <QuizTypeSwipe
-      v-else-if="!finished && currentQuestion.type === questionTypes.SWIPE"
-      :key="currentQuestion.id"
-      :question="currentQuestion"
-      @answer="verifyTimeout"
-    />
-
-    <QuizTypeChoose
-      v-else-if="!finished && currentQuestion.type === questionTypes.CHOOSE"
-      :question="currentQuestion"
-      @answer="verifyTimeout"
-    />
-  </Transition>
 </template>
 
 <style scoped>
