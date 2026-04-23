@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 # Created by https://www.toptal.com/developers/gitignore/api/node,dotenv,react,jetbrains
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,dotenv,react,jetbrains
 
@@ -120,12 +122,33 @@ fabric.properties
 .idea/**/azureSettings.xml
 
 ### Node ###
+>>>>>>> 8236b63685a96cb74da1cffd2f0ba1624a66cd86
 # Logs
 logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+<<<<<<< HEAD
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+=======
 lerna-debug.log*
 .pnpm-debug.log*
 
@@ -275,3 +298,4 @@ sketch
 
 ### Claude ###
 .claude/
+>>>>>>> 8236b63685a96cb74da1cffd2f0ba1624a66cd86
