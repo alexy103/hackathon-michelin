@@ -23,6 +23,8 @@ rm -r .nuxt
 
 echo ""
 
+cd ..
+cd backend/
 rm -r docker_data
 
 echo ""

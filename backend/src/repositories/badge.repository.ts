@@ -21,8 +21,8 @@ export const badgeRepository = {
 
   async create(data: CreateBadgePayload): Promise<Badge> {
     const result = await db.query<Badge>(
-      `INSERT INTO badge (label, image) VALUES ($1, $2) RETURNING *`,
-      [data.label, data.image ?? null],
+      `INSERT INTO badge (label, description, image) VALUES ($1, $2, $3) RETURNING *`,
+      [data.label, data.description ?? null, data.image ?? null],
     );
     const badge: Badge | undefined = result.rows[0];
     if (!badge) throw new AppError("Badge creation failed", 400);
@@ -33,10 +33,11 @@ export const badgeRepository = {
     const result = await db.query<Badge>(
       `UPDATE badge
        SET label = COALESCE($1, label),
-           image = COALESCE($2, image),
+           description = COALESCE($2, description),
+           image = COALESCE($3, image),
            updated_at = NOW()
-       WHERE id = $3 RETURNING *`,
-      [data.label, data.image, badgeId],
+       WHERE id = $4 RETURNING *`,
+      [data.label, data.description, data.image, badgeId],
     );
     const badge: Badge | undefined = result.rows[0];
     if (!badge) throw new AppError("Badge update failed", 400);
