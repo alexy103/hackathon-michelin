@@ -1,19 +1,30 @@
-FROM node:22-slim
+FROM node:20-alpine AS builder
 
-# 1. Créér le répertoire de travail
-WORKDIR /app
+WORKDIR /opt/hackathon/backend
 
-# 2. Copier les fichiers de config
-COPY package*.json tsconfig.json ./
-
-# 3. Instalaltion des dépendances
+COPY package*.json ./
 RUN npm install
 
-# 4. Copier le reste du code
 COPY . .
+RUN npm run build
 
-# 5. Exposer le port interne
-EXPOSE 3003
+##############################
 
-# 6. Lancer en dev avec hot reload
-CMD ["npm", "run", "dev"]
+FROM node:20-alpine
+
+WORKDIR /opt/hackathon/backend
+
+RUN addgroup -S app && adduser -S app -G app
+
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY --from=builder /opt/hackathon/backend/dist ./dist
+COPY --from=builder /opt/hackathon/backend/migrations ./migrations
+COPY --from=builder /opt/hackathon/backend/src/utils/migration-helpers ./src/utils/migration-helpers
+
+RUN chown -R app:app /opt/hackathon
+
+USER app
+
+CMD ["sh", "-c", "npm run migrate:up && npm start"]
