@@ -12,7 +12,7 @@ set -a
 source .env
 set +a
 
-docker compose -f dev.docker-compose.yml up -d --build
+docker compose -f docker-compose.dev.yml up -d --build
 
 echo ""
 
@@ -21,6 +21,13 @@ cd backend/
 cp .env.dev.example .env
 npm install
 
+echo ""
+
+echo "📦 Installation des dépendances du frontend..."
+cd ..
+cd frontend/
+
+npm install
 echo ""
 
 echo "⏳ Attente que PostgreSQL soit prêt..."
@@ -33,6 +40,8 @@ done
 echo "✅ PostgreSQL prêt"
 
 echo "🔄 Lancement des migrations..."
+cd ..
+cd backend/
 npm run migrate:up
 
 echo ""
@@ -41,3 +50,52 @@ echo "🏗 Build de l'app..."
 npm run build
 
 echo "✅ Setup terminé"
+
+echo ""
+
+source .env
+
+echo ""
+echo "----- PGAdmin -----"
+echo ""
+
+echo "Host name : db"
+echo "Port : ${POSTGRES_PORT}"
+echo "Email : ${PGADMIN_DEFAULT_EMAIL}"
+echo "Mdp : ${PGADMIN_DEFAULT_PASSWORD}"
+echo ""
+echo "http://localhost:${PGADMIN_PORT}"
+
+echo ""
+echo "----- PostgreSQL -----"
+echo ""
+
+echo "Identifiant : ${POSTGRES_USER}"
+echo "Mdp : ${POSTGRES_PASSWORD}"
+
+echo ""
+echo "----- Backend -----"
+echo ""
+
+echo "cd backend/"
+echo "npm run dev"
+echo ""
+echo "Backend : http://localhost:${API_PORT}"
+echo "Swagger : http://localhost:${API_PORT}/docs"
+
+echo ""
+
+echo ""
+echo "----- Frontend -----"
+echo ""
+
+echo "cd frontend/"
+echo "npm run dev"
+echo ""
+echo "Frontend : http://localhost:3000"
+
+echo ""
+
+echo "Identifiant du compte administrateur :"
+echo "Email : admin@example.com"
+echo "Mdp : Developpeur@12345"

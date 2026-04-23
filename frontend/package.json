@@ -13,14 +13,16 @@
     "@nuxt/fonts": "^0.14.0",
     "@nuxt/icon": "^2.2.1",
     "@tailwindcss/vite": "^4.2.2",
+    "dotenv": "^17.4.2",
     "nuxt": "^4.4.2",
     "tailwindcss": "^4.2.2",
     "vue": "^3.5.32",
     "vue-router": "^5.0.4"
   },
   "devDependencies": {
+    "@types/node": "^25.6.0",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "typescript": "^6.0.2"    
+    "typescript": "^6.0.2"
   }
 }
