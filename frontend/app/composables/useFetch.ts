@@ -10,5 +10,6 @@ export function useApiFetch(
     headers: {
       "x-api-key": config.public.apiKey,
     },
+    server: false,
   });
 }
