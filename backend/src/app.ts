@@ -12,12 +12,31 @@ import "./docs/answer-badge.openapi";
 import "./docs/user-answer.openapi";
 
 import express, { Express } from "express";
-import { authRouter, rolesRouter, usersRouter, stepRouter, questionTypeRouter, questionRouter, answerRouter, badgeRouter, activityRouter, answerBadgeRouter, userAnswerRouter } from "./routes";
+import cors from "cors";
+import {
+  authRouter,
+  rolesRouter,
+  usersRouter,
+  stepRouter,
+  questionTypeRouter,
+  questionRouter,
+  answerRouter,
+  badgeRouter,
+  activityRouter,
+  answerBadgeRouter,
+  userAnswerRouter,
+} from "./routes";
 import swaggerUi from "swagger-ui-express";
 import { openApiDocument } from "./docs";
+import { config } from "dotenv";
+
+config({
+  quiet: true,
+});
 
 export const app: Express = express();
 
+app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
