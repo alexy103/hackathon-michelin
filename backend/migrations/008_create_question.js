@@ -1,5 +1,5 @@
 exports.up = (pgm) => {
-  pgm.sql(`
+	pgm.sql(`
     CREATE TABLE IF NOT EXISTS question (
       id SERIAL PRIMARY KEY,
       label VARCHAR(255) NOT NULL,
@@ -12,13 +12,13 @@ exports.up = (pgm) => {
     )
   `);
 
-  pgm.sql(`
+	pgm.sql(`
     INSERT INTO question (label, image, timer, question_type_id, step_id)
     VALUES 
         ('Quel est ton budget pour cette expérience ?', null,null,1,1),
         ('Quand souhaites-tu vivre cette expérience ?', null, null, 1,1),
         ('Quelle expérience souhaites-tu faire ?', null, null, 2,1),
-        ('Une bonne expérience c''est avant tout :', null, null, 1,2),
+        ('Une bonne expérience c''est avant tout :', null, null, 3,2),
         ('Lors de tes choix, tu es plutôt :', null, null, 3,2),
         ('Tu fais plus confiance à :', null, null, 3,2),
         ('Clique sur le premier mot que tu vois :', null, 10, 4,3),
@@ -28,5 +28,5 @@ exports.up = (pgm) => {
 };
 
 exports.down = (pgm) => {
-  pgm.sql(`DROP TABLE question`);
+	pgm.sql(`DROP TABLE question`);
 };
