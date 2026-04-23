@@ -1,5 +1,5 @@
 exports.up = (pgm) => {
-  pgm.sql(`
+	pgm.sql(`
     CREATE TABLE IF NOT EXISTS answer (
       id SERIAL PRIMARY KEY,
       label VARCHAR(255) NOT NULL,
@@ -10,7 +10,7 @@ exports.up = (pgm) => {
     )
   `);
 
-  pgm.sql(`
+	pgm.sql(`
     INSERT INTO answer (label, image, question_id)
     VALUES
       ('0', null, 1),
@@ -53,7 +53,7 @@ exports.up = (pgm) => {
       ('Local', null, 9),
       ('Insolite', null, 9),
       ('Modernité', null, 9),
-      ('Tradition', null, 9)
+      ('Tradition', null, 9),
       
       ('Rooftop', null, 9),
       ('Terrasse animée', null, 9),
@@ -63,5 +63,5 @@ exports.up = (pgm) => {
 };
 
 exports.down = (pgm) => {
-  pgm.sql(`DROP TABLE answer`);
+	pgm.sql(`DROP TABLE answer`);
 };
