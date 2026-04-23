@@ -23,7 +23,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: ./scripts/dockerfile/prod.dockerfile
+      dockerfile: backend/scripts/dockerfile/prod.dockerfile
     container_name: hackathon-backend
     restart: always
     env_file:
