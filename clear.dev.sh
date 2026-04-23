@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Fermeture des conteneurs..."
-docker compose -f dev.docker-compose.yml down
+docker compose -f docker-compose.dev.yml down
 
 echo ""
 echo "Suppression des images / volumes docker..."
@@ -16,6 +16,10 @@ cd backend/
 echo "Suppression du .env / node_modules et docker_data..."
 rm -r .env
 rm -r node_modules
+cd ..
+cd frontend/
+rm -r node_modules
+rm -r .nuxt
 
 echo ""
 
