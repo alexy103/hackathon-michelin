@@ -41,6 +41,9 @@ const questionTypes = {
   CHOOSE: {
     label: "Choisissez l'ambiance qui vous attire",
   },
+  CARDS: {
+    label: "Choisissez une carte",
+  },
 };
 
 const questions = [
@@ -116,6 +119,54 @@ const questions = [
     options: ["Option A", "Option B", "Option C"],
     key: "swipe_choice",
   },
+  {
+    id: 10,
+    type: questionTypes.CARDS,
+    label: "Choisissez une carte",
+    options: [
+      {
+        title: "LOCAL",
+        subtitle: "****",
+        image: "/card-local.jpg",
+        value: "LOCAL",
+        backTitle: "Assiette locale",
+        backSubtitle: "Produit du terroir",
+        backImage: "/card-local-back.jpg",
+        backValue: "LOCAL_BACK",
+      },
+      {
+        title: "INSOLITE",
+        subtitle: "***",
+        image: "/card-insolite.jpg",
+        value: "INSOLITE",
+        backTitle: "Expérience étonnante",
+        backSubtitle: "Hors des sentiers battus",
+        backImage: "/card-insolite-back.jpg",
+        backValue: "INSOLITE_BACK",
+      },
+      {
+        title: "MODERNITÉ",
+        subtitle: "**",
+        image: "/card-modernite.jpg",
+        value: "MODERNITÉ",
+        backTitle: "Cuisine créative",
+        backSubtitle: "Esprit contemporain",
+        backImage: "/card-modernite-back.jpg",
+        backValue: "MODERNITE_BACK",
+      },
+      {
+        title: "TRADITION",
+        subtitle: "*",
+        image: "/card-tradition.jpg",
+        value: "TRADITION",
+        backTitle: "Cuisine classique",
+        backSubtitle: "Authentique et rassurant",
+        backImage: "/card-tradition-back.jpg",
+        backValue: "TRADITION_BACK",
+      },
+    ],
+    key: "cards_choice",
+  },
 ];
 
 const steps = [
@@ -129,7 +180,7 @@ const steps = [
   },
   {
     title: "Réflexes",
-    questions: [6, 7, 8],
+    questions: [6, 7, 8, 9],
   },
 ];
 
@@ -189,6 +240,13 @@ function verifyTimeout(answer: any) {
 
   if (currentQuestion.value.type === questionTypes.SWIPE) {
     reponses.value[currentQuestion.value.key] = answer;
+    nextQuestion();
+    return;
+  }
+
+  if (currentQuestion.value.type === questionTypes.CARDS) {
+    reponses.value[currentQuestion.value.key] = answer;
+
     nextQuestion();
     return;
   }
@@ -254,6 +312,12 @@ const reponses = ref({
   confiance: "",
   ambiance: "",
   swipe_choice: "",
+  cards_choice: {
+    frontIndex: -1,
+    backIndex: -1,
+    frontValue: "",
+    backValue: "",
+  },
 });
 
 const progress = computed(() => {
@@ -323,7 +387,7 @@ function prevQuestion() {
 <template>
   <div class="p-4">
     <div v-if="!showStep && !finished" class="mb-4 flex items-center gap-4">
-      <div class="h-2 w-full overflow-hidden rounded bg-gray-200">
+      <div class="z-20 h-2 w-full overflow-hidden rounded bg-gray-200">
         <div
           class="h-full bg-black transition-all duration-500 ease-out"
           :style="{ width: progress + '%' }"
@@ -399,6 +463,7 @@ function prevQuestion() {
           "
           :key="currentQuestion.id"
           :question="currentQuestion"
+          :currentStep="currentStepIndex + 1"
           @answer="verifyTimeout"
           @back="prevQuestion"
         />
@@ -407,6 +472,7 @@ function prevQuestion() {
           v-else-if="currentQuestion.type === questionTypes.SWIPE"
           :key="currentQuestion.id"
           :question="currentQuestion"
+          :currentStep="currentStepIndex + 1"
           @answer="verifyTimeout"
           @back="prevQuestion"
         />
@@ -415,6 +481,16 @@ function prevQuestion() {
           v-else-if="currentQuestion.type === questionTypes.CHOOSE"
           :key="currentQuestion.id"
           :question="currentQuestion"
+          :currentStep="currentStepIndex + 1"
+          @answer="verifyTimeout"
+          @back="prevQuestion"
+        />
+
+        <QuizTypeCards
+          v-else-if="currentQuestion.type === questionTypes.CARDS"
+          :key="currentQuestion.id"
+          :question="currentQuestion"
+          :currentStep="currentStepIndex + 1"
           @answer="verifyTimeout"
           @back="prevQuestion"
         />

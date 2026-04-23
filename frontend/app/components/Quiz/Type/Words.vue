@@ -1,90 +1,125 @@
 <template>
-  <div class="flex items-center justify-center">
-    <div
-      class="relative flex min-h-full w-full max-w-[390px] flex-col bg-[#BA0B2F] px-6 pb-[180px]"
-    >
-      <div class="relative">
-        <button @click="emit('back')" class="absolute h-8 w-8 text-white">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-        </button>
-
-        <div class="mx-auto mb-4 flex w-fit items-center gap-2 text-center">
-          <h1 class="text-2xl font-medium">Étape</h1>
-          <img src="/WhiteStar.png" alt="" class="h-6 w-5.5" />
-        </div>
-      </div>
-
-      <p class="mt-4 mb-10 text-base leading-snug font-medium text-white">
-        Choisissez instinctivement un mot
-      </p>
-
-      <div class="mb-8 rounded-2xl bg-white p-4">
-        <div class="grid grid-cols-10">
-          <span
-            v-for="(letter, i) in letters"
-            :key="i"
-            @click="handleLetterClick(i)"
-            class="cursor-pointer text-center font-medium transition-all duration-200 select-none"
-            style="font-size: 13px; padding: 4px 2px"
-            :class="getLetterClass(i)"
-          >
-            {{ letter }}
-          </span>
-        </div>
-      </div>
-
-      <div class="absolute right-6 bottom-[100px]">
-        <div class="relative h-12 w-12">
-          <svg class="h-12 w-12 -rotate-90" viewBox="0 0 48 48">
-            <circle
-              cx="24"
-              cy="24"
-              r="20"
+  <div class="relative">
+    <div class="flex items-center justify-center">
+      <div
+        class="relative flex min-h-full w-full max-w-[390px] flex-col bg-[#BA0B2F] px-6 pb-[180px]"
+      >
+        <div class="relative">
+          <button @click="emit('back')" class="absolute h-8 w-8 text-white">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
               fill="none"
-              stroke="white"
-              stroke-opacity="0.3"
-              stroke-width="3"
-            />
-            <circle
-              cx="24"
-              cy="24"
-              r="20"
-              fill="none"
-              stroke="white"
-              stroke-width="3"
+              stroke="currentColor"
+              stroke-width="2.5"
               stroke-linecap="round"
-              :stroke-dasharray="circumference"
-              :stroke-dashoffset="dashOffset"
-              style="transition: stroke-dashoffset 1s linear"
-            />
-          </svg>
+              stroke-linejoin="round"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
 
-          <span
-            class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-white"
-          >
-            {{ timeLeft }}
-          </span>
+          <div class="mx-auto mb-4 flex w-fit items-center gap-2 text-center">
+            <h1 class="text-2xl font-medium">Étape</h1>
+            <div class="flex items-center gap-1">
+              <img
+                v-for="i in currentStep"
+                :key="i"
+                src="/WhiteStar.png"
+                alt=""
+                class="h-6 w-5.5"
+              />
+            </div>
+          </div>
+        </div>
+
+        <p
+          class="relative z-2 mt-4 mb-10 text-base leading-snug font-medium text-white"
+        >
+          Choisissez instinctivement un mot
+        </p>
+
+        <div class="relative z-2 mb-8 rounded-2xl bg-white p-4">
+          <div class="grid grid-cols-10">
+            <span
+              v-for="(letter, i) in letters"
+              :key="i"
+              @click="handleLetterClick(i)"
+              class="cursor-pointer text-center font-medium transition-all duration-200 select-none"
+              style="font-size: 13px; padding: 4px 2px"
+              :class="getLetterClass(i)"
+            >
+              {{ letter }}
+            </span>
+          </div>
+        </div>
+
+        <div class="absolute right-6 bottom-[100px]">
+          <div class="relative h-12 w-12">
+            <svg class="h-12 w-12 -rotate-90" viewBox="0 0 48 48">
+              <circle
+                cx="24"
+                cy="24"
+                r="20"
+                fill="none"
+                stroke="white"
+                stroke-opacity="0.3"
+                stroke-width="3"
+              />
+              <circle
+                cx="24"
+                cy="24"
+                r="20"
+                fill="none"
+                stroke="white"
+                stroke-width="3"
+                stroke-linecap="round"
+                :stroke-dasharray="circumference"
+                :stroke-dashoffset="dashOffset"
+                style="transition: stroke-dashoffset 1s linear"
+              />
+            </svg>
+
+            <span
+              class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-white"
+            >
+              {{ timeLeft }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
+    <img
+      :src="`${config.app.baseURL}RedStar.png`"
+      alt=""
+      class="absolute top-5 left-15 h-20 w-19"
+    />
+    <img
+      :src="`${config.app.baseURL}RedStar.png`"
+      alt=""
+      class="pointer-events-none absolute top-1/3 -right-5 h-30 w-29"
+    />
+    <img
+      :src="`${config.app.baseURL}RedStar.png`"
+      alt=""
+      class="pointer-events-none absolute top-4/6 -left-10 h-40 w-39"
+    />
+    <img
+      :src="`${config.app.baseURL}RedStar.png`"
+      alt=""
+      class="pointer-events-none absolute -bottom-3 left-1/2 h-20 w-19"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 
+const config = useRuntimeConfig();
+
 const props = defineProps<{
+  currentStep: number;
   totalSteps: number;
 }>();
 

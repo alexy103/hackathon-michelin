@@ -21,7 +21,15 @@
 
         <div class="mx-auto mb-4 flex w-fit items-center gap-2 text-center">
           <h1 class="text-2xl font-medium">Étape</h1>
-          <img src="/WhiteStar.png" alt="" class="h-6 w-5.5" />
+          <div class="flex items-center gap-1">
+            <img
+              v-for="i in currentStep"
+              :key="i"
+              src="/WhiteStar.png"
+              alt=""
+              class="h-6 w-5.5"
+            />
+          </div>
         </div>
       </div>
 
@@ -31,7 +39,7 @@
         </p>
       </div>
 
-      <div class="mb-16">
+      <div class="relative z-2 mb-16">
         <div class="relative mb-4 h-5">
           <span class="absolute left-0 text-sm font-medium text-white">{{
             labels[0]
@@ -106,10 +114,30 @@
       </div>
     </div>
   </div>
+  <img
+    :src="`${config.app.baseURL}RedStar.png`"
+    alt=""
+    class="absolute top-5 left-15 h-20 w-19"
+  />
+  <img
+    :src="`${config.app.baseURL}RedStar.png`"
+    alt=""
+    class="absolute top-1/3 -right-5 h-30 w-29"
+  />
+  <img
+    :src="`${config.app.baseURL}RedStar.png`"
+    alt=""
+    class="absolute top-4/6 -left-10 h-40 w-39"
+  />
+  <img
+    :src="`${config.app.baseURL}RedStar.png`"
+    alt=""
+    class="absolute -bottom-3 left-1/2 h-20 w-19"
+  />
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+const config = useRuntimeConfig();
 
 const props = defineProps<{
   currentStep: number;
