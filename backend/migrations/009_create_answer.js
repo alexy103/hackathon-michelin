@@ -19,27 +19,27 @@ exports.up = (pgm) => {
       ('3', null, 1),
       ('4', null, 1),
 
-      ('Restaurant', null, 2),
-      ('Hôtel', null, 2),
-      ('Activité', null, 2),
+      ('Restaurant', null, 3),
+      ('Hôtel', null, 3),
+      ('Activité', null, 3),
 
-      ('Matin', null, 3),
-      ('Midi', null, 3),
-      ('Soir', null, 3),
+      ('Matin', null, 2),
+      ('Midi', null, 2),
+      ('Soir', null, 2),
 
-      ('La précision', null, 4),
-      ('L''émotion', null, 4),
-      ('La surprise', null, 4),
-      ('La régularité', null, 4),
+      ('Que tout soit parfait', null, 4),
+      ('Ressentir une émotion', null, 4),
+      ('Être surpris', null, 4),
+      ('Pouvoir y retourner sans hésiter', null, 4),
 
-      ('Prudent', null, 5),
-      ('Curieux', null, 5),
-      ('Spontané', null, 5),
+      ('Plutôt safe', null, 5),
       ('Exigeant', null, 5),
+      ('Toujours curieux', null, 5),
+      ('One life', null, 5),
 
-      ('Votre instinct', null, 6),
-      ('Une recommandation fiable', null, 6),
-      ('Vos habitudes', null, 6),
+      ('Mon instinct', null, 6),
+      ('Une source fiable', null, 6),
+      ('Mes habitudes', null, 6),
       ('L''avis des autres', null, 6),
 
       ('Convivial', null, 7),
@@ -47,21 +47,18 @@ exports.up = (pgm) => {
       ('Raffiné', null, 7),
       ('Découverte', null, 7),
 
-      ('Rouge', null, 8),
-      ('Bleu', null, 8),
+      ('Bistrot animé', null, 8),
+      ('Restaurant gastronomique', null, 8),
 
-      ('Bistrot animé', null, 9),
-      ('Restaurant gastronomique', null, 9),
-
-      ('Rooftop', null, 10),
-      ('Terrasse animée', null, 10),
-      ('Restaurant calme', null, 10),
-      ('Street food', null, 10),
-
-      ('Tradition', null, 11),
-      ('Modernité', null, 11),
-      ('Insolite', null, 11),
-      ('Local', null, 11)
+      ('Local', null, 9),
+      ('Insolite', null, 9),
+      ('Modernité', null, 9),
+      ('Tradition', null, 9)
+      
+      ('Rooftop', null, 9),
+      ('Terrasse animée', null, 9),
+      ('Restaurant calme', null, 9),
+      ('Street food', null, 9)
   `);
 };
 

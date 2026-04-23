@@ -11,10 +11,12 @@ exports.up = (pgm) => {
   pgm.sql(`
     INSERT INTO question_type (label) 
     VALUES 
-        ('Qcm'), 
-        ('Mot croisé'), 
-        ('Swipe'), 
-        ('Cartes michelin')
+        ('personnality'),
+        ('multichoice'),
+        ('uniquechoice'),
+        ('words'),
+        ('swipe'),
+        ('cards')
   `);
 };
 
