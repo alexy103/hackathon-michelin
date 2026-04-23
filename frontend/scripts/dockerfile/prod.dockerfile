@@ -8,7 +8,8 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN NUXT_PUBLIC_API_BASE="" npm run generate
+ARG API_KEY=test
+RUN NUXT_PUBLIC_API_BASE="/api" NUXT_PUBLIC_API_KEY="${API_KEY}" npm run generate
 
 RUN chown -R app:app /opt/hackathon
 

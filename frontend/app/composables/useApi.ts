@@ -1,7 +1,6 @@
-const BASE_URL = "http://localhost:3003/api";
-
 export const useApi = () => {
   const config = useRuntimeConfig();
+  const BASE_URL = config.public.apiBase;
   const token = useState<string | null>("token", () => null);
   const role = useState<string | null>("role", () => null);
 
