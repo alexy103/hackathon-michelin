@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { requireAuth } from "../middlewares";
+import { requireAuth, requireApiKey } from "../middlewares";
 import { createUserAnswer, deleteUserAnswers, getMyAnswers } from "../controllers";
 
 export const userAnswerRouter: Router = Router();
 
-userAnswerRouter.get("/me", requireAuth(), getMyAnswers);
+userAnswerRouter.get("/me", requireApiKey, requireAuth(), getMyAnswers);
 
-userAnswerRouter.post("/", requireAuth(), createUserAnswer);
+userAnswerRouter.post("/", requireApiKey, requireAuth(), createUserAnswer);
 
-userAnswerRouter.delete("/", requireAuth("admin"), deleteUserAnswers);
+userAnswerRouter.delete("/", requireApiKey, requireAuth("admin"), deleteUserAnswers);

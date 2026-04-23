@@ -12,7 +12,7 @@ import { UserAnswerSchema } from "../schemas";
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/user-answers/me",
   tags: ["UserAnswers"],
   summary: "Get current user's answers",
@@ -25,7 +25,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "post",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/user-answers",
   tags: ["UserAnswers"],
   summary: "Record an answer for current user",
@@ -49,7 +49,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "delete",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/user-answers",
   tags: ["UserAnswers"],
   summary: "Delete all answers for current user (admin)",

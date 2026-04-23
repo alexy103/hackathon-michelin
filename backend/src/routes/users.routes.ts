@@ -1,18 +1,18 @@
 import { Router } from "express";
-import { requireAuth, validateSchema } from "../middlewares";
+import { requireAuth, requireApiKey, validateSchema } from "../middlewares";
 import { createUser, deleteUser, getUserById, getUsers, toggleUserActivation, updateUser } from "../controllers";
 import { UpdateUserPayloadSchema, CreateUserPayloadSchema } from "../schemas";
 
 export const usersRouter: Router = Router();
 
-usersRouter.get("/", requireAuth("admin"), getUsers);
+usersRouter.get("/", requireApiKey, requireAuth("admin"), getUsers);
 
-usersRouter.get("/:userId", requireAuth("admin"), getUserById);
+usersRouter.get("/:userId", requireApiKey, requireAuth("admin"), getUserById);
 
-usersRouter.post("/", requireAuth("admin"), validateSchema(CreateUserPayloadSchema), createUser);
+usersRouter.post("/", requireApiKey, requireAuth("admin"), validateSchema(CreateUserPayloadSchema), createUser);
 
-usersRouter.put("/:userId", requireAuth("admin"), validateSchema(UpdateUserPayloadSchema), updateUser);
+usersRouter.put("/:userId", requireApiKey, requireAuth("admin"), validateSchema(UpdateUserPayloadSchema), updateUser);
 
-usersRouter.patch("/:userId/active", requireAuth("admin"), toggleUserActivation);
+usersRouter.patch("/:userId/active", requireApiKey, requireAuth("admin"), toggleUserActivation);
 
-usersRouter.delete("/:userId", requireAuth("admin"), deleteUser);
+usersRouter.delete("/:userId", requireApiKey, requireAuth("admin"), deleteUser);

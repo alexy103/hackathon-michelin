@@ -12,7 +12,7 @@ import { StepSchema, CreateStepPayloadSchema, UpdateStepPayloadSchema } from "..
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/steps",
   tags: ["Steps"],
   summary: "Get all steps",
@@ -25,7 +25,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/steps/{stepId}",
   tags: ["Steps"],
   summary: "Get step by id",
@@ -42,7 +42,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "post",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/steps",
   tags: ["Steps"],
   summary: "Create step",
@@ -60,7 +60,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "put",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/steps/{stepId}",
   tags: ["Steps"],
   summary: "Update step",
@@ -80,7 +80,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "delete",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/steps/{stepId}",
   tags: ["Steps"],
   summary: "Delete step",

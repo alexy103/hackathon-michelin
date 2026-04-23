@@ -1,16 +1,16 @@
 import { Router } from "express";
-import { requireAuth, validateSchema } from "../middlewares";
+import { requireAuth, requireApiKey, validateSchema } from "../middlewares";
 import { createStep, deleteStep, getStepById, getSteps, updateStep } from "../controllers";
 import { CreateStepPayloadSchema, UpdateStepPayloadSchema } from "../schemas";
 
 export const stepRouter: Router = Router();
 
-stepRouter.get("/", requireAuth(), getSteps);
+stepRouter.get("/", requireApiKey, getSteps);
 
-stepRouter.get("/:stepId", requireAuth(), getStepById);
+stepRouter.get("/:stepId", requireApiKey, getStepById);
 
-stepRouter.post("/", requireAuth("admin"), validateSchema(CreateStepPayloadSchema), createStep);
+stepRouter.post("/", requireApiKey, requireAuth("admin"), validateSchema(CreateStepPayloadSchema), createStep);
 
-stepRouter.put("/:stepId", requireAuth("admin"), validateSchema(UpdateStepPayloadSchema), updateStep);
+stepRouter.put("/:stepId", requireApiKey, requireAuth("admin"), validateSchema(UpdateStepPayloadSchema), updateStep);
 
-stepRouter.delete("/:stepId", requireAuth("admin"), deleteStep);
+stepRouter.delete("/:stepId", requireApiKey, requireAuth("admin"), deleteStep);

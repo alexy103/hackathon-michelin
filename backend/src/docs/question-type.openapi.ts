@@ -12,7 +12,7 @@ import { CreateQuestionTypePayloadSchema, QuestionTypeSchema, UpdateQuestionType
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/question-types",
   tags: ["QuestionTypes"],
   summary: "Get all question types",
@@ -25,7 +25,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/question-types/{typeId}",
   tags: ["QuestionTypes"],
   summary: "Get question type by id",
@@ -40,7 +40,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "post",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/question-types",
   tags: ["QuestionTypes"],
   summary: "Create question type",
@@ -56,7 +56,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "put",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/question-types/{typeId}",
   tags: ["QuestionTypes"],
   summary: "Update question type",
@@ -76,7 +76,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "delete",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/question-types/{typeId}",
   tags: ["QuestionTypes"],
   summary: "Delete question type",

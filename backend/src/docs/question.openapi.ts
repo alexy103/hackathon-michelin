@@ -12,7 +12,7 @@ import { QuestionSchema, CreateQuestionPayloadSchema, UpdateQuestionPayloadSchem
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/questions",
   tags: ["Questions"],
   summary: "Get all questions",
@@ -25,7 +25,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/questions/count",
   tags: ["Questions"],
   summary: "Count all questions",
@@ -38,7 +38,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/questions/step/{stepId}",
   tags: ["Questions"],
   summary: "Get questions by step",
@@ -55,7 +55,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/questions/step/{stepId}/count",
   tags: ["Questions"],
   summary: "Count questions by step",
@@ -72,7 +72,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/questions/{questionId}",
   tags: ["Questions"],
   summary: "Get question by id",
@@ -89,7 +89,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "post",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/questions",
   tags: ["Questions"],
   summary: "Create question",
@@ -107,7 +107,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "put",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/questions/{questionId}",
   tags: ["Questions"],
   summary: "Update question",
@@ -127,7 +127,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "delete",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/questions/{questionId}",
   tags: ["Questions"],
   summary: "Delete question",

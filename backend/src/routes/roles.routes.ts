@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { requireAuth } from "../middlewares";
+import { requireAuth, requireApiKey } from "../middlewares";
 import { getRoleById, getRoles } from "../controllers";
 
 export const rolesRouter: Router = Router();
 
-rolesRouter.get("/", requireAuth("admin"), getRoles);
+rolesRouter.get("/", requireApiKey, requireAuth("admin"), getRoles);
 
-rolesRouter.get("/:roleId", requireAuth("admin"), getRoleById);
+rolesRouter.get("/:roleId", requireApiKey, requireAuth("admin"), getRoleById);

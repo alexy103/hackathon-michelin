@@ -13,7 +13,7 @@ import { CreateUserPayloadSchema, UpdateUserPayloadSchema, UserSchema } from "..
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/users",
   tags: ["Users"],
   summary: "Get all users with optional filter",
@@ -30,7 +30,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/users/{userId}",
   tags: ["Users"],
   summary: "Get user by id",
@@ -48,7 +48,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "post",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/users",
   tags: ["Users"],
   summary: "Create user",
@@ -67,7 +67,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "put",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/users/{userId}",
   tags: ["Users"],
   summary: "Update user",
@@ -88,7 +88,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "patch",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/users/{userId}/active",
   tags: ["Users"],
   summary: "Activate or disable user",
@@ -115,7 +115,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "delete",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/users/{userId}",
   tags: ["Users"],
   summary: "Delete user",
