@@ -3,7 +3,7 @@ const props = defineProps({
   question: Object,
 });
 
-const emit = defineEmits(["answer"]);
+const emit = defineEmits(["answer", "back"]);
 const direction = ref(0);
 
 const isVisible = ref(true);
@@ -65,15 +65,57 @@ const cardStyle = computed(() => ({
 </script>
 
 <template>
-  <div>
-    <h1 class="mb-8">{{ question.label }}</h1>
+  <div class="flex items-center justify-center">
     <div
-      class="mx-auto flex h-72 w-52 cursor-grab touch-none items-center justify-center rounded-xl border bg-white shadow-lg select-none active:cursor-grabbing"
-      :class="isDragging ? '' : 'transition-transform duration-300'"
-      :style="cardStyle"
-      @pointerdown="startDrag"
+      class="relative flex min-h-full w-full max-w-[390px] flex-col bg-[#BA0B2F] px-6 pb-[180px]"
     >
-      card
+      <div class="relative">
+        <button @click="emit('back')" class="absolute h-8 w-8 text-white">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+
+        <div class="mx-auto mb-4 flex w-fit items-center gap-2 text-center">
+          <h1 class="text-2xl font-medium">Étape</h1>
+          <img src="/WhiteStar.png" alt="" class="h-6 w-5.5" />
+        </div>
+      </div>
+
+      <p class="mt-4 mb-10 text-base leading-snug font-medium text-white">
+        {{ question.label }}
+      </p>
+
+      <div class="flex flex-1 items-center justify-center">
+        <div class="relative w-full">
+          <!-- <div
+            class="mb-6 flex justify-between text-sm font-medium text-white/80"
+          >
+            <span>← Refuser</span>
+            <span>Accepter →</span>
+          </div> -->
+
+          <div
+            class="mx-auto flex h-72 w-52 cursor-grab touch-none items-center justify-center rounded-xl border border-white/20 bg-white shadow-lg select-none active:cursor-grabbing"
+            :class="isDragging ? '' : 'transition-transform duration-300'"
+            :style="cardStyle"
+            @pointerdown="startDrag"
+          >
+            <span class="px-4 text-center text-base font-semibold text-black">
+              {{ question.options?.[0] ?? "card" }}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

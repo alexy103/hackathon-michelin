@@ -1,36 +1,33 @@
 <template>
-  <div class="flex min-h-screen items-center justify-center">
+  <div class="flex items-center justify-center">
     <div
-      class="relative flex min-h-full w-full max-w-[390px] flex-col bg-[#BA0B2F] px-6 py-10"
-      style="font-family: &quot;Figtree&quot;, sans-serif"
+      class="relative flex min-h-full w-full max-w-[390px] flex-col bg-[#BA0B2F] px-6 pb-[180px]"
     >
-      <button
-        @click="emit('back')"
-        class="mb-8 -ml-1 flex h-8 w-8 items-center justify-center text-white"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>
-      </button>
+      <div class="relative">
+        <button @click="emit('back')" class="absolute h-8 w-8 text-white">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
 
-      <h1 class="mb-4 text-2xl font-medium text-white">Étape</h1>
-
-      <div class="mb-6 flex justify-center">
-        <span
-          class="rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#BA0B2F]"
-        >
-          Choisissez instinctivement un mot :
-        </span>
+        <div class="mx-auto mb-4 flex w-fit items-center gap-2 text-center">
+          <h1 class="text-2xl font-medium">Étape</h1>
+          <img src="/WhiteStar.png" alt="" class="h-6 w-5.5" />
+        </div>
       </div>
+
+      <p class="mt-4 mb-10 text-base leading-snug font-medium text-white">
+        Choisissez instinctivement un mot
+      </p>
 
       <div class="mb-8 rounded-2xl bg-white p-4">
         <div class="grid grid-cols-10">
@@ -47,7 +44,7 @@
         </div>
       </div>
 
-      <div class="mt-auto flex justify-end">
+      <div class="absolute right-6 bottom-[100px]">
         <div class="relative h-12 w-12">
           <svg class="h-12 w-12 -rotate-90" viewBox="0 0 48 48">
             <circle
@@ -72,6 +69,7 @@
               style="transition: stroke-dashoffset 1s linear"
             />
           </svg>
+
           <span
             class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-white"
           >
@@ -87,7 +85,6 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 
 const props = defineProps<{
-  currentStep: number;
   totalSteps: number;
 }>();
 
@@ -96,8 +93,9 @@ const emit = defineEmits<{
   (e: "back"): void;
 }>();
 
-const DURATION = 3;
+const DURATION = 3000;
 const timeLeft = ref(DURATION);
+const hasAnswered = ref(false);
 let interval: ReturnType<typeof setInterval> | null = null;
 
 const circumference = 2 * Math.PI * 20;
@@ -115,7 +113,7 @@ const letters = [
   "E",
   "R",
   "T",
-  "E", // 0-9
+  "E",
   "J",
   "K",
   "S",
@@ -125,7 +123,7 @@ const letters = [
   "F",
   "Q",
   "D",
-  "E", // 10-19
+  "E",
   "Q",
   "U",
   "N",
@@ -135,7 +133,7 @@ const letters = [
   "I",
   "D",
   "E",
-  "N", // 20-29
+  "N",
   "K",
   "Y",
   "V",
@@ -145,7 +143,7 @@ const letters = [
   "S",
   "M",
   "H",
-  "Y", // 30-39
+  "Y",
   "C",
   "O",
   "N",
@@ -155,7 +153,7 @@ const letters = [
   "I",
   "A",
   "L",
-  "G", // 40-49
+  "G",
   "Z",
   "V",
   "H",
@@ -165,7 +163,7 @@ const letters = [
   "X",
   "Y",
   "T",
-  "R", // 50-59
+  "R",
   "L",
   "R",
   "K",
@@ -175,7 +173,7 @@ const letters = [
   "Y",
   "U",
   "K",
-  "X", // 60-69
+  "X",
   "C",
   "S",
   "V",
@@ -185,7 +183,7 @@ const letters = [
   "P",
   "O",
   "C",
-  "M", // 70-79
+  "M",
   "I",
   "R",
   "A",
@@ -195,7 +193,7 @@ const letters = [
   "N",
   "É",
   "L",
-  "V", // 80-89
+  "V",
   "G",
   "W",
   "G",
@@ -205,7 +203,7 @@ const letters = [
   "I",
   "K",
   "Y",
-  "J", // 90-99
+  "J",
 ];
 
 const words = [
@@ -224,22 +222,42 @@ function getWordForIndex(i: number) {
 function getLetterClass(i: number) {
   const word = getWordForIndex(i);
   if (!word) return "text-[#191919]";
-  if (selectedWord.value === word.name)
-    return "text-white bg-[#BA0B2F] rounded";
+  if (selectedWord.value === word.name) {
+    return "rounded bg-[#BA0B2F] text-white";
+  }
   return "text-[#191919] hover:text-[#BA0B2F]";
 }
 
 function handleLetterClick(i: number) {
   const word = getWordForIndex(i);
-  if (!word) return;
-  selectedWord.value = selectedWord.value === word.name ? null : word.name;
+  if (!word || hasAnswered.value) return;
+
+  selectedWord.value = word.name;
+  hasAnswered.value = true;
+
+  if (interval) {
+    clearInterval(interval);
+    interval = null;
+  }
+
+  setTimeout(() => {
+    emit("next", word.name);
+  }, 1500);
 }
 
 onMounted(() => {
   interval = setInterval(() => {
+    if (hasAnswered.value) return;
+
     timeLeft.value--;
+
     if (timeLeft.value <= 0) {
-      clearInterval(interval!);
+      if (interval) {
+        clearInterval(interval);
+        interval = null;
+      }
+
+      hasAnswered.value = true;
       emit("next", selectedWord.value ?? "");
     }
   }, 1000);

@@ -109,23 +109,27 @@ const questions = [
     assets: ["/pill-red.png", "/pill-blue.png"],
     key: "ambiance",
   },
+  {
+    id: 9,
+    type: questionTypes.SWIPE,
+    label: "Swipe !",
+    options: ["Option A", "Option B", "Option C"],
+    key: "swipe_choice",
+  },
 ];
 
 const steps = [
   {
-    title: "Point de départ",
-    description: "Quelques questions pour commencer",
+    title: "Ton moment",
     questions: [0, 1, 2],
   },
   {
     title: "Personnalité",
-    description: "On affine votre profil",
     questions: [3, 4, 5],
   },
   {
     title: "Réflexes",
-    description: "Vos instincts",
-    questions: [6, 7],
+    questions: [6, 7, 8],
   },
 ];
 
@@ -179,6 +183,12 @@ function verifyTimeout(answer: any) {
     reponses.value[currentQuestion.value.key] =
       currentQuestion.value.options[answer];
 
+    nextQuestion();
+    return;
+  }
+
+  if (currentQuestion.value.type === questionTypes.SWIPE) {
+    reponses.value[currentQuestion.value.key] = answer;
     nextQuestion();
     return;
   }
@@ -243,6 +253,7 @@ const reponses = ref({
   profil: "",
   confiance: "",
   ambiance: "",
+  swipe_choice: "",
 });
 
 const progress = computed(() => {
@@ -277,6 +288,37 @@ const totalStepQuestions = computed(() => {
 });
 
 const stepChoiceValue = ref<number | null>(null);
+
+function prevQuestion() {
+  if (showStep.value || isTransitioning.value) return;
+
+  const step = steps[currentStepIndex.value];
+  if (!step) return;
+
+  const firstQuestionOfStep = step.questions[0];
+  const isFirstQuestionOfStep =
+    currentQuestionIndex.value === firstQuestionOfStep;
+
+  if (!isFirstQuestionOfStep) {
+    currentQuestionIndex.value--;
+    stepChoiceValue.value = null;
+    typeValue.value = [];
+    sliderValue.value = 0;
+    return;
+  }
+
+  if (currentStepIndex.value > 0) {
+    currentStepIndex.value--;
+
+    const previousStep = steps[currentStepIndex.value];
+    currentQuestionIndex.value =
+      previousStep.questions[previousStep.questions.length - 1];
+
+    stepChoiceValue.value = null;
+    typeValue.value = [];
+    sliderValue.value = 0;
+  }
+}
 </script>
 <template>
   <div class="p-4">
@@ -313,7 +355,7 @@ const stepChoiceValue = ref<number | null>(null);
           :steps="currentQuestion.steps"
           v-model="sliderValue"
           @next="verifyTimeout"
-          @back="() => {}"
+          @back="prevQuestion"
         />
 
         <QuizTypeChoice
@@ -326,7 +368,7 @@ const stepChoiceValue = ref<number | null>(null);
           :multiple="true"
           v-model="typeValue"
           @next="verifyTimeout"
-          @back="() => {}"
+          @back="prevQuestion"
         />
 
         <QuizTypeWords
@@ -335,7 +377,7 @@ const stepChoiceValue = ref<number | null>(null);
           :currentStep="currentStepIndex + 1"
           :totalSteps="8"
           @next="verifyTimeout"
-          @back="() => {}"
+          @back="prevQuestion"
         />
 
         <QuizTypeChoice
@@ -348,7 +390,7 @@ const stepChoiceValue = ref<number | null>(null);
           :multiple="false"
           v-model="stepChoiceValue"
           @next="verifyTimeout"
-          @back="() => {}"
+          @back="prevQuestion"
         />
 
         <QuizTypeFast
@@ -358,6 +400,7 @@ const stepChoiceValue = ref<number | null>(null);
           :key="currentQuestion.id"
           :question="currentQuestion"
           @answer="verifyTimeout"
+          @back="prevQuestion"
         />
 
         <QuizTypeSwipe
@@ -365,6 +408,7 @@ const stepChoiceValue = ref<number | null>(null);
           :key="currentQuestion.id"
           :question="currentQuestion"
           @answer="verifyTimeout"
+          @back="prevQuestion"
         />
 
         <QuizTypeChoose
@@ -372,6 +416,7 @@ const stepChoiceValue = ref<number | null>(null);
           :key="currentQuestion.id"
           :question="currentQuestion"
           @answer="verifyTimeout"
+          @back="prevQuestion"
         />
       </div>
     </Transition>

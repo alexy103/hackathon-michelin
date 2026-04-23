@@ -1,34 +1,31 @@
 <template>
-  <div class="flex min-h-screen items-center justify-center">
+  <div class="flex items-center justify-center">
     <div
-      class="relative flex min-h-full w-full max-w-[390px] flex-col bg-[#BA0B2F] px-6 py-10"
+      class="relative flex min-h-full w-full max-w-[390px] flex-col bg-[#BA0B2F] px-6 pb-[180px]"
     >
-      <button
-        @click="emit('back')"
-        class="mb-8 -ml-1 flex h-8 w-8 items-center justify-center text-white"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>
-      </button>
+      <div class="relative">
+        <button @click="emit('back')" class="absolute h-8 w-8">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
 
-      <h1 class="mb-4 text-2xl font-medium text-white">Étape</h1>
+        <div class="mx-auto mb-4 flex w-fit items-center gap-2 text-center">
+          <h1 class="text-2xl font-medium">Étape</h1>
+          <img src="/WhiteStar.png" alt="" class="h-6 w-5.5" />
+        </div>
+      </div>
 
       <div class="mb-16 flex items-start gap-4">
-        <span
-          class="shrink-0 font-medium text-white"
-          style="font-size: 72px; line-height: 1"
-          >{{ currentStep }}</span
-        >
         <p class="mt-4 text-base leading-snug font-medium text-white">
           {{ question }}
         </p>
@@ -99,7 +96,7 @@
         </div>
       </div>
 
-      <div class="mt-auto flex justify-end">
+      <div class="absolute right-6 bottom-[100px]">
         <button
           @click="emit('next', localValue)"
           class="rounded-full bg-white px-8 py-3 text-sm font-semibold text-[#191919] transition-all duration-150 hover:bg-white/90 active:scale-95"
@@ -134,7 +131,3 @@ const localValue = ref(
   props.modelValue ?? Math.floor((totalCrans.value - 1) / 2),
 );
 </script>
-
-<style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap");
-</style>
