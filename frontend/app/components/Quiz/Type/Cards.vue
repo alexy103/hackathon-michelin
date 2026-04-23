@@ -73,10 +73,10 @@ function selectBackCard(index: number) {
 </script>
 
 <template>
-  <div class="relative">
-    <div class="flex items-center justify-center">
+  <div class="relative h-screen overflow-hidden">
+    <div class="flex h-full items-center justify-center">
       <div
-        class="relative flex min-h-full w-full max-w-[390px] flex-col bg-[#BA0B2F] px-6 pb-[180px]"
+        class="relative flex h-screen w-full max-w-[390px] flex-col overflow-hidden bg-[#BA0B2F] px-6 pt-6 pb-8"
       >
         <div class="relative">
           <button @click="emit('back')" class="absolute h-8 w-8 text-white">
@@ -95,7 +95,7 @@ function selectBackCard(index: number) {
           </button>
 
           <div
-            class="relative z-20 mx-auto mb-4 flex w-fit items-center gap-2 text-center"
+            class="relative z-20 mx-auto mb-3 flex w-fit items-center gap-2 text-center"
           >
             <h1 class="text-2xl font-medium">Étape</h1>
             <div class="flex items-center gap-1">
@@ -111,12 +111,12 @@ function selectBackCard(index: number) {
         </div>
 
         <p
-          class="relative z-2 mt-4 mb-3 text-base leading-snug font-medium text-white"
+          class="relative z-2 mt-2 mb-2 text-base leading-snug font-medium text-white"
         >
           {{ question.label }}
         </p>
 
-        <p class="relative z-2 mb-8 text-sm font-medium text-white/80">
+        <p class="relative z-2 mb-5 text-sm font-medium text-white/80">
           {{
             showBackSide
               ? "Choisissez à nouveau"
@@ -124,7 +124,7 @@ function selectBackCard(index: number) {
           }}
         </p>
 
-        <div class="relative z-2 grid grid-cols-2 gap-4">
+        <div class="relative z-2 grid flex-1 grid-cols-2 content-start gap-3">
           <button
             v-for="(option, i) in question.options"
             :key="i"
@@ -140,7 +140,7 @@ function selectBackCard(index: number) {
             @click="showBackSide ? selectBackCard(i) : selectCard(i)"
           >
             <div
-              class="relative h-[230px] w-full transition-transform duration-700 [transform-style:preserve-3d]"
+              class="relative h-[200px] w-full transition-transform duration-700 [transform-style:preserve-3d]"
               :class="{
                 '[transform:rotateY(180deg)]': showBackSide,
               }"
@@ -149,7 +149,7 @@ function selectBackCard(index: number) {
                 class="absolute inset-0 rounded-[18px] border-[6px] border-white bg-[#B31222] p-4 text-white [backface-visibility:hidden]"
               >
                 <div
-                  class="mb-6 text-center text-[10px] font-semibold tracking-wide uppercase"
+                  class="mb-4 text-center text-[10px] font-semibold tracking-wide uppercase"
                 >
                   Le Guide Michelin
                 </div>
@@ -174,13 +174,13 @@ function selectBackCard(index: number) {
                 class="absolute inset-0 [transform:rotateY(180deg)] rounded-[18px] bg-white p-4 text-[#B31222] [backface-visibility:hidden]"
               >
                 <div
-                  class="mb-4 text-center text-[10px] font-semibold tracking-wide uppercase"
+                  class="mb-3 text-center text-[10px] font-semibold tracking-wide uppercase"
                 >
                   Le Guide Michelin
                 </div>
 
                 <div
-                  class="mb-3 h-[120px] overflow-hidden rounded-[10px] bg-[#D9D9D9]"
+                  class="mb-3 h-[100px] overflow-hidden rounded-[10px] bg-[#D9D9D9]"
                 >
                   <img
                     v-if="option.backImage || option.image"

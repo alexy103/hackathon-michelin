@@ -383,119 +383,136 @@ function prevQuestion() {
     sliderValue.value = 0;
   }
 }
+
+const showProfil = ref(false);
+
+function handleEnregistrer() {
+  showProfil.value = true;
+}
 </script>
 <template>
-  <div class="p-4">
-    <div v-if="!showStep && !finished" class="mb-4 flex items-center gap-4">
-      <div class="z-20 h-2 w-full overflow-hidden rounded bg-gray-200">
+  <div>
+    <Profil v-if="showProfil" />
+
+    <template v-else>
+      <div
+        v-if="!showStep && !finished"
+        class="mb-4 flex items-center gap-4 p-4"
+      >
+        <div class="z-20 h-2 w-full overflow-hidden rounded bg-gray-200">
+          <div
+            class="h-full bg-black transition-all duration-500 ease-out"
+            :style="{ width: progress + '%' }"
+          />
+        </div>
+        <p class="inline w-fit shrink-0">
+          {{ currentStepQuestionNumber }} / {{ totalStepQuestions }}
+        </p>
+      </div>
+
+      <QuizStep
+        v-if="showStep && !finished"
+        :step="currentStepIndex + 1"
+        :label="steps[currentStepIndex]?.title"
+      />
+
+      <QuizResultats v-else-if="finished" @enregistrer="handleEnregistrer" />
+
+      <Transition name="slide" mode="out-in">
         <div
-          class="h-full bg-black transition-all duration-500 ease-out"
-          :style="{ width: progress + '%' }"
-        />
-      </div>
-      <p class="inline w-fit shrink-0">
-        {{ currentStepQuestionNumber }} / {{ totalStepQuestions }}
-      </p>
-    </div>
+          v-if="!showStep && !finished && !isTransitioning && currentQuestion"
+        >
+          <QuizTypePersonnality
+            v-if="
+              currentQuestion &&
+              currentQuestion.type === questionTypes.PERSONNALITY
+            "
+            :key="currentQuestion.id"
+            :currentStep="1"
+            :totalSteps="8"
+            :question="currentQuestion.label"
+            :labels="currentQuestion.labels"
+            :steps="currentQuestion.steps"
+            v-model="sliderValue"
+            @next="verifyTimeout"
+            @back="prevQuestion"
+          />
 
-    <QuizStep
-      v-if="showStep && !finished"
-      :step="currentStepIndex + 1"
-      :label="steps[currentStepIndex]?.title"
-    />
+          <QuizTypeChoice
+            v-else-if="currentQuestion.type === questionTypes.MULTICHOICE"
+            :key="currentQuestion.id"
+            :currentStep="currentStepIndex + 1"
+            :totalSteps="8"
+            :question="currentQuestion.label"
+            :options="currentQuestion.options"
+            :multiple="true"
+            v-model="typeValue"
+            @next="verifyTimeout"
+            @back="prevQuestion"
+          />
 
-    <Transition name="slide" mode="out-in">
-      <div v-if="!showStep && !finished && !isTransitioning && currentQuestion">
-        <QuizTypePersonnality
-          v-if="
-            currentQuestion &&
-            currentQuestion.type === questionTypes.PERSONNALITY
-          "
-          :key="currentQuestion.id"
-          :currentStep="1"
-          :totalSteps="8"
-          :question="currentQuestion.label"
-          :labels="currentQuestion.labels"
-          :steps="currentQuestion.steps"
-          v-model="sliderValue"
-          @next="verifyTimeout"
-          @back="prevQuestion"
-        />
+          <QuizTypeWords
+            v-else-if="currentQuestion.type === questionTypes.WORDS"
+            :key="currentQuestion.id"
+            :currentStep="currentStepIndex + 1"
+            :totalSteps="8"
+            @next="verifyTimeout"
+            @back="prevQuestion"
+          />
 
-        <QuizTypeChoice
-          v-else-if="currentQuestion.type === questionTypes.MULTICHOICE"
-          :key="currentQuestion.id"
-          :currentStep="currentStepIndex + 1"
-          :totalSteps="8"
-          :question="currentQuestion.label"
-          :options="currentQuestion.options"
-          :multiple="true"
-          v-model="typeValue"
-          @next="verifyTimeout"
-          @back="prevQuestion"
-        />
+          <QuizTypeChoice
+            v-else-if="currentQuestion.type === questionTypes.UNIQUECHOICE"
+            :key="currentQuestion.id"
+            :currentStep="currentStepIndex + 1"
+            :totalSteps="8"
+            :question="currentQuestion.label"
+            :options="currentQuestion.options"
+            :multiple="false"
+            v-model="stepChoiceValue"
+            @next="verifyTimeout"
+            @back="prevQuestion"
+          />
 
-        <QuizTypeWords
-          v-else-if="currentQuestion.type === questionTypes.WORDS"
-          :key="currentQuestion.id"
-          :currentStep="currentStepIndex + 1"
-          :totalSteps="8"
-          @next="verifyTimeout"
-          @back="prevQuestion"
-        />
+          <QuizTypeFast
+            v-else-if="
+              currentQuestion && currentQuestion.type === questionTypes.FAST
+            "
+            :key="currentQuestion.id"
+            :question="currentQuestion"
+            :currentStep="currentStepIndex + 1"
+            @answer="verifyTimeout"
+            @back="prevQuestion"
+          />
 
-        <QuizTypeChoice
-          v-else-if="currentQuestion.type === questionTypes.UNIQUECHOICE"
-          :key="currentQuestion.id"
-          :currentStep="currentStepIndex + 1"
-          :totalSteps="8"
-          :question="currentQuestion.label"
-          :options="currentQuestion.options"
-          :multiple="false"
-          v-model="stepChoiceValue"
-          @next="verifyTimeout"
-          @back="prevQuestion"
-        />
+          <QuizTypeSwipe
+            v-else-if="currentQuestion.type === questionTypes.SWIPE"
+            :key="currentQuestion.id"
+            :question="currentQuestion"
+            :currentStep="currentStepIndex + 1"
+            @answer="verifyTimeout"
+            @back="prevQuestion"
+          />
 
-        <QuizTypeFast
-          v-else-if="
-            currentQuestion && currentQuestion.type === questionTypes.FAST
-          "
-          :key="currentQuestion.id"
-          :question="currentQuestion"
-          :currentStep="currentStepIndex + 1"
-          @answer="verifyTimeout"
-          @back="prevQuestion"
-        />
+          <QuizTypeChoose
+            v-else-if="currentQuestion.type === questionTypes.CHOOSE"
+            :key="currentQuestion.id"
+            :question="currentQuestion"
+            :currentStep="currentStepIndex + 1"
+            @answer="verifyTimeout"
+            @back="prevQuestion"
+          />
 
-        <QuizTypeSwipe
-          v-else-if="currentQuestion.type === questionTypes.SWIPE"
-          :key="currentQuestion.id"
-          :question="currentQuestion"
-          :currentStep="currentStepIndex + 1"
-          @answer="verifyTimeout"
-          @back="prevQuestion"
-        />
-
-        <QuizTypeChoose
-          v-else-if="currentQuestion.type === questionTypes.CHOOSE"
-          :key="currentQuestion.id"
-          :question="currentQuestion"
-          :currentStep="currentStepIndex + 1"
-          @answer="verifyTimeout"
-          @back="prevQuestion"
-        />
-
-        <QuizTypeCards
-          v-else-if="currentQuestion.type === questionTypes.CARDS"
-          :key="currentQuestion.id"
-          :question="currentQuestion"
-          :currentStep="currentStepIndex + 1"
-          @answer="verifyTimeout"
-          @back="prevQuestion"
-        />
-      </div>
-    </Transition>
+          <QuizTypeCards
+            v-else-if="currentQuestion.type === questionTypes.CARDS"
+            :key="currentQuestion.id"
+            :question="currentQuestion"
+            :currentStep="currentStepIndex + 1"
+            @answer="verifyTimeout"
+            @back="prevQuestion"
+          />
+        </div>
+      </Transition>
+    </template>
   </div>
 </template>
 
