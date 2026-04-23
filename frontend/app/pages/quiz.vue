@@ -19,6 +19,27 @@ function showNextStep() {
   }, STEP_DURATION);
 }
 
+const {
+  data: questionsData,
+  pending: questionsPending,
+  error: questionsError,
+} = useQuestions();
+const {
+  data: questionTypesData,
+  pending: questionTypesPending,
+  error: questionTypesError,
+} = useQuestionTypes();
+const {
+  data: stepsData,
+  pending: stepsPending,
+  error: stepsError,
+} = useSteps();
+const {
+  data: answersData,
+  pending: answersPending,
+  error: answersError,
+} = useAnswers();
+
 const questionTypes = {
   PERSONNALITY: {
     label: "Quel budget souhaitez-vous consacrer à cette expérience ?",
@@ -32,164 +53,247 @@ const questionTypes = {
   WORDS: {
     label: "Choisissez instinctivement un mot",
   },
-  FAST: {
-    label: "Choisissez sans réfléchir",
-  },
   SWIPE: {
     label: "Swipe !",
-  },
-  CHOOSE: {
-    label: "Choisissez l'ambiance qui vous attire",
   },
   CARDS: {
     label: "Choisissez une carte",
   },
 };
 
-const questions = [
-  {
-    id: 1,
-    type: questionTypes.PERSONNALITY,
-    label: questionTypes.PERSONNALITY.label,
-    labels: ["€", "€€", "€€€"],
-    steps: 5,
-    modelValue: 2,
-    key: "budget",
-  },
-  {
-    id: 2,
-    type: questionTypes.PERSONNALITY,
-    label: "Quand souhaites-tu vivre cette expérience ?",
-    labels: ["Matin", "Midi", "Soir"],
-    steps: 3,
-    modelValue: 1,
-    key: "moment",
-  },
-  {
-    id: 3,
-    type: questionTypes.MULTICHOICE,
-    label: "Quel type d'expérience souhaitez-vous faire ?",
-    options: ["Un restaurant", "Un hôtel", "Une activité"],
-    key: "type",
-  },
-  {
-    id: 4,
-    type: questionTypes.UNIQUECHOICE,
-    label: "Une bonne expérience c’est avant tout :",
-    options: ["La précision", "Les émotions", "La surprise", "La régularité"],
-    key: "experience",
-  },
-  {
-    id: 5,
-    type: questionTypes.UNIQUECHOICE,
-    label: "Dans vos choix, vous êtes plutôt :",
-    options: ["Prudent", "Curieux", "Spontané", "Exigeant"],
-    key: "profil",
-  },
-  {
-    id: 6,
-    type: questionTypes.UNIQUECHOICE,
-    label: "Vous faites le plus confiance à :",
-    options: [
-      "Votre instinct",
-      "Une recommandation",
-      "Vos habitudes",
-      "L’avis des autres",
-    ],
-    key: "confiance",
-  },
-  {
-    id: 7,
-    type: questionTypes.WORDS,
-    label: "Choisissez instinctivement un mot",
-    key: "mot",
-  },
-  {
-    id: 8,
-    type: questionTypes.CHOOSE,
-    label: "Fais ton choix",
-    options: ["Pilule rouge", "Pilule bleue"],
-    assets: ["/pill-red.png", "/pill-blue.png"],
-    key: "ambiance",
-  },
-  {
-    id: 9,
-    type: questionTypes.SWIPE,
-    label: "Swipe !",
-    options: ["Option A", "Option B", "Option C"],
-    key: "swipe_choice",
-  },
-  {
-    id: 10,
-    type: questionTypes.CARDS,
-    label: "Choisissez une carte",
-    options: [
-      {
-        title: "LOCAL",
-        subtitle: "****",
-        image: "/card-local.jpg",
-        value: "LOCAL",
-        backTitle: "Assiette locale",
-        backSubtitle: "Produit du terroir",
-        backImage: "/card-local-back.jpg",
-        backValue: "LOCAL_BACK",
-      },
-      {
-        title: "INSOLITE",
-        subtitle: "***",
-        image: "/card-insolite.jpg",
-        value: "INSOLITE",
-        backTitle: "Expérience étonnante",
-        backSubtitle: "Hors des sentiers battus",
-        backImage: "/card-insolite-back.jpg",
-        backValue: "INSOLITE_BACK",
-      },
-      {
-        title: "MODERNITÉ",
-        subtitle: "**",
-        image: "/card-modernite.jpg",
-        value: "MODERNITÉ",
-        backTitle: "Cuisine créative",
-        backSubtitle: "Esprit contemporain",
-        backImage: "/card-modernite-back.jpg",
-        backValue: "MODERNITE_BACK",
-      },
-      {
-        title: "TRADITION",
-        subtitle: "*",
-        image: "/card-tradition.jpg",
-        value: "TRADITION",
-        backTitle: "Cuisine classique",
-        backSubtitle: "Authentique et rassurant",
-        backImage: "/card-tradition-back.jpg",
-        backValue: "TRADITION_BACK",
-      },
-    ],
-    key: "cards_choice",
-  },
-];
+const isLoading = computed(
+  () =>
+    questionsPending.value ||
+    questionTypesPending.value ||
+    stepsPending.value ||
+    answersPending.value,
+);
 
-const steps = [
-  {
-    title: "Ton moment",
-    questions: [0, 1, 2],
-  },
-  {
-    title: "Personnalité",
-    questions: [3, 4, 5],
-  },
-  {
-    title: "Réflexes",
-    questions: [6, 7, 8, 9],
-  },
-];
+const hasError = computed(
+  () =>
+    questionsError.value ||
+    questionTypesError.value ||
+    stepsError.value ||
+    answersError.value,
+);
+
+const questionTypesMap = computed(() => {
+  const rawTypes = questionTypesData.value?.data ?? [];
+
+  return rawTypes.reduce((acc: Record<number, string>, type: any) => {
+    acc[type.id] = type.label;
+    return acc;
+  }, {});
+});
+
+const answersByQuestionId = computed(() => {
+  const rawAnswers = answersData.value?.data ?? [];
+
+  return rawAnswers.reduce((acc: Record<number, any[]>, answer: any) => {
+    if (!acc[answer.question_id]) {
+      acc[answer.question_id] = [];
+    }
+
+    acc[answer.question_id].push(answer);
+    return acc;
+  }, {});
+});
+
+const questions = computed(() => {
+  const rawQuestions = questionsData.value?.data ?? [];
+  const mappedTypes = questionTypesMap.value;
+  const groupedAnswers = answersByQuestionId.value;
+
+  return rawQuestions
+    .map((question: any) => {
+      const mappedType = mappedTypes[question.question_type_id];
+      const questionAnswers = groupedAnswers[question.id] ?? [];
+
+      if (mappedType === "personnality") {
+        const labels = questionAnswers.map((answer: any) => answer.label);
+
+        if (question.id === 1) {
+          const budgetLabels = labels.map((label: string) => {
+            if (label === "0") return "€";
+            if (label === "1") return "€€";
+            if (label === "2") return "€€€";
+            if (label === "3") return "€€€€";
+            if (label === "4") return "€€€€€";
+            return label;
+          });
+
+          return {
+            id: question.id,
+            type: questionTypes.PERSONNALITY,
+            label: question.label,
+            labels: budgetLabels,
+            steps: budgetLabels.length,
+            modelValue: 2,
+            key: "budget",
+            step_id: question.step_id,
+            timer: question.timer,
+            image: question.image,
+          };
+        }
+
+        return {
+          id: question.id,
+          type: questionTypes.PERSONNALITY,
+          label: question.label,
+          labels,
+          steps: labels.length,
+          modelValue: 1,
+          key: "moment",
+          step_id: question.step_id,
+          timer: question.timer,
+          image: question.image,
+        };
+      }
+
+      if (mappedType === "multichoice") {
+        return {
+          id: question.id,
+          type: questionTypes.MULTICHOICE,
+          label: question.label,
+          options: questionAnswers.map((answer: any) => answer.label),
+          key: "type",
+          step_id: question.step_id,
+          timer: question.timer,
+          image: question.image,
+        };
+      }
+
+      if (mappedType === "uniquechoice") {
+        return {
+          id: question.id,
+          type: questionTypes.UNIQUECHOICE,
+          label: question.label,
+          options: questionAnswers.map((answer: any) => answer.label),
+          key:
+            question.id === 4
+              ? "experience"
+              : question.id === 5
+                ? "profil"
+                : "confiance",
+          step_id: question.step_id,
+          timer: question.timer,
+          image: question.image,
+        };
+      }
+
+      if (mappedType === "words") {
+        return {
+          id: question.id,
+          type: questionTypes.WORDS,
+          label: question.label,
+          options: questionAnswers.map((answer: any) => answer.label),
+          key: "mot",
+          step_id: question.step_id,
+          timer: question.timer,
+          image: question.image,
+        };
+      }
+
+      if (mappedType === "swipe") {
+        return {
+          id: question.id,
+          type: questionTypes.SWIPE,
+          label: question.label,
+          options: questionAnswers.map((answer: any) => answer.label),
+          key: "swipe_choice",
+          step_id: question.step_id,
+          timer: question.timer,
+          image: question.image,
+        };
+      }
+
+      if (mappedType === "cards") {
+        return {
+          id: question.id,
+          type: questionTypes.CARDS,
+          label: question.label,
+          options: [
+            {
+              title: questionAnswers[0]?.label ?? "",
+              subtitle: "****",
+              image: "/card-local.jpg",
+              value: questionAnswers[0]?.label ?? "",
+              backTitle: questionAnswers[4]?.label ?? "",
+              backSubtitle: "",
+              backImage: "/card-local-back.jpg",
+              backValue: questionAnswers[4]?.label ?? "",
+            },
+            {
+              title: questionAnswers[1]?.label ?? "",
+              subtitle: "***",
+              image: "/card-insolite.jpg",
+              value: questionAnswers[1]?.label ?? "",
+              backTitle: questionAnswers[5]?.label ?? "",
+              backSubtitle: "",
+              backImage: "/card-insolite-back.jpg",
+              backValue: questionAnswers[5]?.label ?? "",
+            },
+            {
+              title: questionAnswers[2]?.label ?? "",
+              subtitle: "**",
+              image: "/card-modernite.jpg",
+              value: questionAnswers[2]?.label ?? "",
+              backTitle: questionAnswers[6]?.label ?? "",
+              backSubtitle: "",
+              backImage: "/card-modernite-back.jpg",
+              backValue: questionAnswers[6]?.label ?? "",
+            },
+            {
+              title: questionAnswers[3]?.label ?? "",
+              subtitle: "*",
+              image: "/card-tradition.jpg",
+              value: questionAnswers[3]?.label ?? "",
+              backTitle: questionAnswers[7]?.label ?? "",
+              backSubtitle: "",
+              backImage: "/card-tradition-back.jpg",
+              backValue: questionAnswers[7]?.label ?? "",
+            },
+          ],
+          key: "cards_choice",
+          step_id: question.step_id,
+          timer: question.timer,
+          image: question.image,
+        };
+      }
+
+      return null;
+    })
+    .filter(Boolean);
+});
+
+const steps = computed(() => {
+  const rawSteps = stepsData.value?.data ?? [];
+  const rawQuestions = questions.value;
+
+  return rawSteps
+    .slice()
+    .sort((a: any, b: any) => a.number - b.number)
+    .map((step: any) => ({
+      title: step.label,
+      questions: rawQuestions
+        .map((question: any, index: number) =>
+          question.step_id === step.id ? index : -1,
+        )
+        .filter((index: number) => index !== -1),
+    }))
+    .filter((step: any) => step.questions.length > 0);
+});
 
 const currentQuestion = computed(
-  () => questions[currentQuestionIndex.value] ?? null,
+  () => questions.value[currentQuestionIndex.value] ?? null,
 );
-const finished = computed(() => currentQuestionIndex.value >= questions.length);
+const finished = computed(
+  () => currentQuestionIndex.value >= questions.value.length,
+);
 
 function verifyTimeout(answer: any) {
+  if (!currentQuestion.value) return;
+
   console.log("Réponse :", answer);
 
   if (currentQuestion.value.type === questionTypes.PERSONNALITY) {
@@ -230,14 +334,6 @@ function verifyTimeout(answer: any) {
     return;
   }
 
-  if (currentQuestion.value.type === questionTypes.CHOOSE) {
-    reponses.value[currentQuestion.value.key] =
-      currentQuestion.value.options[answer];
-
-    nextQuestion();
-    return;
-  }
-
   if (currentQuestion.value.type === questionTypes.SWIPE) {
     reponses.value[currentQuestion.value.key] = answer;
     nextQuestion();
@@ -246,38 +342,14 @@ function verifyTimeout(answer: any) {
 
   if (currentQuestion.value.type === questionTypes.CARDS) {
     reponses.value[currentQuestion.value.key] = answer;
-
     nextQuestion();
     return;
   }
-
-  const step = steps[currentStepIndex.value];
-  if (!step) return;
-  const isLastOfStep = currentQuestionIndex.value === step.questions.at(-1);
-
-  const isChoose = currentQuestion.value.type === questionTypes.CHOOSE;
-  const isLastQuestion = currentQuestionIndex.value === questions.length - 1;
-
-  let delay = isChoose && !isLastQuestion ? 600 : 0;
-
-  if (isLastOfStep) {
-    isTransitioning.value = true;
-    currentQuestionIndex.value++;
-    sliderValue.value = 0;
-
-    setTimeout(() => {
-      isTransitioning.value = false;
-      nextQuestion(true);
-    }, 500);
-
-    return;
-  }
-
-  setTimeout(nextQuestion, delay);
 }
 
 function nextQuestion(fromStepEnd = false) {
-  const step = steps[currentStepIndex.value];
+  const step = steps.value[currentStepIndex.value];
+  if (!step) return;
 
   stepChoiceValue.value = null;
   typeValue.value = [];
@@ -286,11 +358,10 @@ function nextQuestion(fromStepEnd = false) {
   if (!fromStepEnd && currentQuestionIndex.value < step.questions.at(-1)) {
     currentQuestionIndex.value++;
   } else {
-    if (currentStepIndex.value < steps.length - 1) {
+    if (currentStepIndex.value < steps.value.length - 1) {
       currentStepIndex.value++;
-
-      currentQuestionIndex.value = steps[currentStepIndex.value].questions[0];
-
+      currentQuestionIndex.value =
+        steps.value[currentStepIndex.value].questions[0];
       showNextStep();
     } else {
       currentQuestionIndex.value++;
@@ -310,7 +381,6 @@ const reponses = ref({
   experience: "",
   profil: "",
   confiance: "",
-  ambiance: "",
   swipe_choice: "",
   cards_choice: {
     frontIndex: -1,
@@ -321,12 +391,14 @@ const reponses = ref({
 });
 
 const progress = computed(() => {
-  const step = steps[currentStepIndex.value];
+  const step = steps.value[currentStepIndex.value];
 
   if (!step) return 0;
 
   const firstQuestionIndex = step.questions[0];
   const totalQuestionsInStep = step.questions.length;
+
+  if (!totalQuestionsInStep) return 0;
 
   return (
     ((currentQuestionIndex.value - firstQuestionIndex) / totalQuestionsInStep) *
@@ -335,7 +407,7 @@ const progress = computed(() => {
 });
 
 const currentStepQuestionNumber = computed(() => {
-  const step = steps[currentStepIndex.value];
+  const step = steps.value[currentStepIndex.value];
   if (!step) return 0;
 
   const raw = currentQuestionIndex.value - step.questions[0] + 1;
@@ -344,7 +416,7 @@ const currentStepQuestionNumber = computed(() => {
 });
 
 const totalStepQuestions = computed(() => {
-  const step = steps[currentStepIndex.value];
+  const step = steps.value[currentStepIndex.value];
 
   if (!step) return 0;
 
@@ -356,7 +428,7 @@ const stepChoiceValue = ref<number | null>(null);
 function prevQuestion() {
   if (showStep.value || isTransitioning.value) return;
 
-  const step = steps[currentStepIndex.value];
+  const step = steps.value[currentStepIndex.value];
   if (!step) return;
 
   const firstQuestionOfStep = step.questions[0];
@@ -374,7 +446,7 @@ function prevQuestion() {
   if (currentStepIndex.value > 0) {
     currentStepIndex.value--;
 
-    const previousStep = steps[currentStepIndex.value];
+    const previousStep = steps.value[currentStepIndex.value];
     currentQuestionIndex.value =
       previousStep.questions[previousStep.questions.length - 1];
 
@@ -390,128 +462,125 @@ function handleEnregistrer() {
   showProfil.value = true;
 }
 </script>
+
 <template>
-  <div>
+  <div class="h-screen overflow-hidden">
     <Profil v-if="showProfil" />
 
     <template v-else>
       <div
-        v-if="!showStep && !finished"
-        class="mb-4 flex items-center gap-4 p-4"
+        v-if="isLoading"
+        class="flex h-full items-center justify-center p-4 text-center"
       >
-        <div class="z-20 h-2 w-full overflow-hidden rounded bg-gray-200">
-          <div
-            class="h-full bg-black transition-all duration-500 ease-out"
-            :style="{ width: progress + '%' }"
-          />
-        </div>
-        <p class="inline w-fit shrink-0">
-          {{ currentStepQuestionNumber }} / {{ totalStepQuestions }}
-        </p>
+        Chargement...
       </div>
 
-      <QuizStep
-        v-if="showStep && !finished"
-        :step="currentStepIndex + 1"
-        :label="steps[currentStepIndex]?.title"
-      />
+      <div
+        v-else-if="hasError"
+        class="flex h-full items-center justify-center p-4 text-center"
+      >
+        Une erreur est survenue.
+      </div>
 
-      <QuizResultats v-else-if="finished" @enregistrer="handleEnregistrer" />
-
-      <Transition name="slide" mode="out-in">
+      <template v-else>
         <div
-          v-if="!showStep && !finished && !isTransitioning && currentQuestion"
+          v-if="!showStep && !finished"
+          class="mb-4 flex items-center gap-4 p-4"
         >
-          <QuizTypePersonnality
-            v-if="
-              currentQuestion &&
-              currentQuestion.type === questionTypes.PERSONNALITY
-            "
-            :key="currentQuestion.id"
-            :currentStep="1"
-            :totalSteps="8"
-            :question="currentQuestion.label"
-            :labels="currentQuestion.labels"
-            :steps="currentQuestion.steps"
-            v-model="sliderValue"
-            @next="verifyTimeout"
-            @back="prevQuestion"
-          />
-
-          <QuizTypeChoice
-            v-else-if="currentQuestion.type === questionTypes.MULTICHOICE"
-            :key="currentQuestion.id"
-            :currentStep="currentStepIndex + 1"
-            :totalSteps="8"
-            :question="currentQuestion.label"
-            :options="currentQuestion.options"
-            :multiple="true"
-            v-model="typeValue"
-            @next="verifyTimeout"
-            @back="prevQuestion"
-          />
-
-          <QuizTypeWords
-            v-else-if="currentQuestion.type === questionTypes.WORDS"
-            :key="currentQuestion.id"
-            :currentStep="currentStepIndex + 1"
-            :totalSteps="8"
-            @next="verifyTimeout"
-            @back="prevQuestion"
-          />
-
-          <QuizTypeChoice
-            v-else-if="currentQuestion.type === questionTypes.UNIQUECHOICE"
-            :key="currentQuestion.id"
-            :currentStep="currentStepIndex + 1"
-            :totalSteps="8"
-            :question="currentQuestion.label"
-            :options="currentQuestion.options"
-            :multiple="false"
-            v-model="stepChoiceValue"
-            @next="verifyTimeout"
-            @back="prevQuestion"
-          />
-
-          <QuizTypeFast
-            v-else-if="
-              currentQuestion && currentQuestion.type === questionTypes.FAST
-            "
-            :key="currentQuestion.id"
-            :question="currentQuestion"
-            :currentStep="currentStepIndex + 1"
-            @answer="verifyTimeout"
-            @back="prevQuestion"
-          />
-
-          <QuizTypeSwipe
-            v-else-if="currentQuestion.type === questionTypes.SWIPE"
-            :key="currentQuestion.id"
-            :question="currentQuestion"
-            :currentStep="currentStepIndex + 1"
-            @answer="verifyTimeout"
-            @back="prevQuestion"
-          />
-
-          <QuizTypeChoose
-            v-else-if="currentQuestion.type === questionTypes.CHOOSE"
-            :key="currentQuestion.id"
-            :question="currentQuestion"
-            :currentStep="currentStepIndex + 1"
-            @answer="verifyTimeout"
-            @back="prevQuestion"
-          />
-
-          <QuizTypeCards
-            v-else-if="currentQuestion.type === questionTypes.CARDS"
-            :key="currentQuestion.id"
-            :question="currentQuestion"
-            :currentStep="currentStepIndex + 1"
-            @answer="verifyTimeout"
-            @back="prevQuestion"
-          />
+          <div class="z-20 h-2 w-full overflow-hidden rounded bg-gray-200">
+            <div
+              class="bg-red h-full transition-all duration-500 ease-out"
+              :style="{ width: progress + '%' }"
+            />
+          </div>
+          <p class="inline w-fit shrink-0">
+            {{ currentStepQuestionNumber }} / {{ totalStepQuestions }}
+          </p>
         </div>
-      </Transition>
+
+        <QuizStep
+          v-if="showStep && !finished"
+          :step="currentStepIndex + 1"
+          :label="steps[currentStepIndex]?.title"
+        />
+
+        <QuizResultats v-else-if="finished" @enregistrer="handleEnregistrer" />
+
+        <Transition name="slide" mode="out-in">
+          <div
+            v-if="!showStep && !finished && !isTransitioning && currentQuestion"
+          >
+            <QuizTypePersonnality
+              v-if="
+                currentQuestion &&
+                currentQuestion.type === questionTypes.PERSONNALITY
+              "
+              :key="currentQuestion.id"
+              :currentStep="1"
+              :totalSteps="8"
+              :question="currentQuestion.label"
+              :labels="currentQuestion.labels"
+              :steps="currentQuestion.steps"
+              v-model="sliderValue"
+              @next="verifyTimeout"
+              @back="prevQuestion"
+            />
+
+            <QuizTypeChoice
+              v-else-if="currentQuestion.type === questionTypes.MULTICHOICE"
+              :key="currentQuestion.id"
+              :currentStep="currentStepIndex + 1"
+              :totalSteps="8"
+              :question="currentQuestion.label"
+              :options="currentQuestion.options"
+              :multiple="true"
+              v-model="typeValue"
+              @next="verifyTimeout"
+              @back="prevQuestion"
+            />
+
+            <QuizTypeWords
+              v-else-if="currentQuestion.type === questionTypes.WORDS"
+              :key="currentQuestion.id"
+              :currentStep="currentStepIndex + 1"
+              :totalSteps="8"
+              @next="verifyTimeout"
+              @back="prevQuestion"
+            />
+
+            <QuizTypeChoice
+              v-else-if="currentQuestion.type === questionTypes.UNIQUECHOICE"
+              :key="currentQuestion.id"
+              :currentStep="currentStepIndex + 1"
+              :totalSteps="8"
+              :question="currentQuestion.label"
+              :options="currentQuestion.options"
+              :multiple="false"
+              v-model="stepChoiceValue"
+              @next="verifyTimeout"
+              @back="prevQuestion"
+            />
+
+            <QuizTypeSwipe
+              v-else-if="currentQuestion.type === questionTypes.SWIPE"
+              :key="currentQuestion.id"
+              :question="currentQuestion"
+              :currentStep="currentStepIndex + 1"
+              @answer="verifyTimeout"
+              @back="prevQuestion"
+            />
+
+            <QuizTypeCards
+              v-else-if="currentQuestion.type === questionTypes.CARDS"
+              :key="currentQuestion.id"
+              :question="currentQuestion"
+              :currentStep="currentStepIndex + 1"
+              @answer="verifyTimeout"
+              @back="prevQuestion"
+            />
+          </div>
+        </Transition>
+      </template>
     </template>
   </div>
 </template>
