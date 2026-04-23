@@ -47,18 +47,18 @@ exports.up = (pgm) => {
       ('Raffiné', null, 7),
       ('Découverte', null, 7),
 
-      ('Bistrot animé', null, 8),
-      ('Restaurant gastronomique', null, 8),
+      ('Bistrot animé', 'Bistro.png', 8),
+      ('Restaurant gastronomique', 'Bistro.png', 8),
 
       ('Local', null, 9),
       ('Insolite', null, 9),
       ('Modernité', null, 9),
       ('Tradition', null, 9),
       
-      ('Rooftop', null, 9),
-      ('Terrasse animée', null, 9),
-      ('Restaurant calme', null, 9),
-      ('Street food', null, 9)
+      ('Rooftop', 'Rooftop.png', 9),
+      ('Terrasse animée', 'Terrace.png', 9),
+      ('Restaurant calme', 'Chill.png', 9),
+      ('Street food', 'Streetfood.png', 9)
   `);
 };
 

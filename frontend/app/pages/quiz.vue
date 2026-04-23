@@ -199,7 +199,7 @@ const questions = computed(() => {
           id: question.id,
           type: questionTypes.SWIPE,
           label: question.label,
-          options: questionAnswers.map((answer: any) => answer.label),
+          options: questionAnswers.map((answer: any) => answer),
           key: "swipe_choice",
           step_id: question.step_id,
           timer: question.timer,
@@ -215,12 +215,12 @@ const questions = computed(() => {
           options: [
             {
               title: questionAnswers[0]?.label ?? "",
-              subtitle: "****",
+              subtitle: 4,
               image: "/card-local.jpg",
               value: questionAnswers[0]?.label ?? "",
               backTitle: questionAnswers[4]?.label ?? "",
               backSubtitle: "",
-              backImage: "/card-local-back.jpg",
+              backImage: questionAnswers[4]?.image ?? "",
               backValue: questionAnswers[4]?.label ?? "",
             },
             {
@@ -230,7 +230,7 @@ const questions = computed(() => {
               value: questionAnswers[1]?.label ?? "",
               backTitle: questionAnswers[5]?.label ?? "",
               backSubtitle: "",
-              backImage: "/card-insolite-back.jpg",
+              backImage: questionAnswers[5]?.image ?? "",
               backValue: questionAnswers[5]?.label ?? "",
             },
             {
@@ -240,7 +240,7 @@ const questions = computed(() => {
               value: questionAnswers[2]?.label ?? "",
               backTitle: questionAnswers[6]?.label ?? "",
               backSubtitle: "",
-              backImage: "/card-modernite-back.jpg",
+              backImage: questionAnswers[6]?.image ?? "",
               backValue: questionAnswers[6]?.label ?? "",
             },
             {
@@ -250,7 +250,7 @@ const questions = computed(() => {
               value: questionAnswers[3]?.label ?? "",
               backTitle: questionAnswers[7]?.label ?? "",
               backSubtitle: "",
-              backImage: "/card-tradition-back.jpg",
+              backImage: questionAnswers[7]?.image ?? "",
               backValue: questionAnswers[7]?.label ?? "",
             },
           ],
@@ -293,8 +293,6 @@ const finished = computed(
 
 function verifyTimeout(answer: any) {
   if (!currentQuestion.value) return;
-
-  console.log("Réponse :", answer);
 
   if (currentQuestion.value.type === questionTypes.PERSONNALITY) {
     const value = sliderValue.value;
@@ -485,11 +483,11 @@ function handleEnregistrer() {
       <template v-else>
         <div
           v-if="!showStep && !finished"
-          class="mb-4 flex items-center gap-4 p-4"
+          class="absolute top-25 left-0 z-30 flex w-full items-center gap-4 p-4"
         >
           <div class="z-20 h-2 w-full overflow-hidden rounded bg-gray-200">
             <div
-              class="bg-red h-full transition-all duration-500 ease-out"
+              class="bg-red-dark h-full transition-all duration-500 ease-out"
               :style="{ width: progress + '%' }"
             />
           </div>

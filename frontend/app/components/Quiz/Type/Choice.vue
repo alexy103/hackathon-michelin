@@ -48,10 +48,10 @@ function handleNext() {
 </script>
 
 <template>
-  <div class="relative">
-    <div class="flex items-center justify-center">
+  <div class="relative h-screen overflow-hidden">
+    <div class="flex h-full items-center justify-center">
       <div
-        class="relative flex min-h-full w-full max-w-[390px] flex-col bg-[#BA0B2F] px-6 pb-[180px]"
+        class="relative flex h-screen w-full max-w-[390px] flex-col overflow-hidden bg-[#BA0B2F] px-6 pt-16 pb-8"
       >
         <div class="relative">
           <button @click="emit('back')" class="absolute h-8 w-8">
@@ -69,7 +69,9 @@ function handleNext() {
             </svg>
           </button>
 
-          <div class="mx-auto mb-4 flex w-fit items-center gap-2 text-center">
+          <div
+            class="relative z-20 mx-auto mb-3 flex w-fit items-center gap-2 text-center"
+          >
             <h1 class="text-2xl font-medium">Étape</h1>
             <div class="flex items-center gap-1">
               <img
@@ -83,13 +85,13 @@ function handleNext() {
           </div>
         </div>
 
-        <div class="relative z-2 mb-10 flex items-start gap-4">
-          <p class="mt-4 text-base leading-snug font-medium text-white">
-            {{ question }}
-          </p>
-        </div>
+        <p
+          class="relative z-2 mt-12 block text-center text-2xl leading-snug font-semibold text-white"
+        >
+          {{ question }}
+        </p>
 
-        <div class="relative z-2 mb-10 flex flex-col gap-4">
+        <div class="relative z-2 mt-6 mb-28 flex flex-col gap-4">
           <button
             v-for="(option, i) in options"
             :key="i"
@@ -109,7 +111,7 @@ function handleNext() {
           </button>
         </div>
 
-        <div class="absolute right-6 bottom-[100px]">
+        <div class="absolute right-6 bottom-15">
           <button
             @click="handleNext"
             :disabled="
@@ -133,6 +135,7 @@ function handleNext() {
         </div>
       </div>
     </div>
+
     <img
       :src="`${config.app.baseURL}RedStar.png`"
       alt=""

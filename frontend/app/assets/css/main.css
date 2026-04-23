@@ -4,11 +4,10 @@
   --default-font-family: var(--font-figtree);
 
   --color-red: #ba0b2f;
+  --color-red-dark: #86022c;
   --color-red-bright: #db1a1a;
   --color-black: #191919;
   --color-gray-300: #999999;
   --color-gray-500: #757575;
   --color-gray-700: #4d4d4d;
-}
-@layer utilities {
 }

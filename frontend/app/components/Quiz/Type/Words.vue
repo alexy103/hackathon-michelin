@@ -1,8 +1,8 @@
 <template>
-  <div class="relative">
-    <div class="flex items-center justify-center">
+  <div class="relative h-screen overflow-hidden">
+    <div class="flex h-full items-center justify-center">
       <div
-        class="relative flex min-h-full w-full max-w-[390px] flex-col bg-[#BA0B2F] px-6 pb-[180px]"
+        class="relative flex h-screen w-full max-w-[390px] flex-col overflow-hidden bg-[#BA0B2F] px-6 pt-16 pb-8"
       >
         <div class="relative">
           <button @click="emit('back')" class="absolute h-8 w-8 text-white">
@@ -20,7 +20,9 @@
             </svg>
           </button>
 
-          <div class="mx-auto mb-4 flex w-fit items-center gap-2 text-center">
+          <div
+            class="relative z-20 mx-auto mb-3 flex w-fit items-center gap-2 text-center"
+          >
             <h1 class="text-2xl font-medium">Étape</h1>
             <div class="flex items-center gap-1">
               <img
@@ -35,12 +37,12 @@
         </div>
 
         <p
-          class="relative z-2 mt-4 mb-10 text-base leading-snug font-medium text-white"
+          class="relative z-2 mt-12 block text-center text-2xl leading-snug font-semibold text-white"
         >
           Choisissez instinctivement un mot
         </p>
 
-        <div class="relative z-2 mb-8 rounded-2xl bg-white p-4">
+        <div class="relative z-2 mt-auto mb-23 rounded-2xl bg-white p-4">
           <div class="grid grid-cols-10">
             <span
               v-for="(letter, i) in letters"
@@ -55,7 +57,7 @@
           </div>
         </div>
 
-        <div class="absolute right-6 bottom-[100px]">
+        <div class="absolute right-6 bottom-15">
           <div class="relative h-12 w-12">
             <svg class="h-12 w-12 -rotate-90" viewBox="0 0 48 48">
               <circle
@@ -90,6 +92,7 @@
         </div>
       </div>
     </div>
+
     <img
       :src="`${config.app.baseURL}RedStar.png`"
       alt=""
