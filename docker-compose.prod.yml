@@ -11,7 +11,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./backend/docker_data/prod/postgres_data:/var/lib/postgresql/data
+      - ./docker_data/prod/postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
       interval: 10s
@@ -23,7 +23,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: backend/scripts/dockerfile/prod.dockerfile
+      dockerfile: ./scripts/dockerfile/prod.dockerfile
     container_name: hackathon-backend
     restart: always
     env_file:
