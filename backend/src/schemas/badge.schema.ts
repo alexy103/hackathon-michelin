@@ -4,6 +4,7 @@ import { registry } from "../docs/openapi.registry";
 export const BadgeSchema = zod.object({
   id: zod.number(),
   label: zod.string().openapi({ example: "Gourmet" }),
+  description: zod.string().nullable(),
   image: zod.string().nullable(),
   created_at: zod.date(),
   updated_at: zod.date(),
@@ -12,6 +13,7 @@ registry.register("Badge", BadgeSchema);
 
 export const CreateBadgePayloadSchema = zod.object({
   label: zod.string().min(1).openapi({ example: "Gourmet" }),
+  description: zod.string().optional(),
   image: zod.string().optional(),
 });
 registry.register("CreateBadgePayload", CreateBadgePayloadSchema);

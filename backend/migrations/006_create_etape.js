@@ -8,6 +8,14 @@ exports.up = (pgm) => {
       updated_at TIMESTAMP DEFAULT now()
     )
   `);
+
+  pgm.sql(`
+    INSERT INTO step (number, label)
+    VALUES 
+        ('1', 'Étape 1'),
+        ('2', 'Étape 2'),
+        ('3', 'Étape 3')
+  `);
 };
 
 exports.down = (pgm) => {
