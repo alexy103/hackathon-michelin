@@ -1,5 +1,5 @@
 <template>
-  <div>
-      <NuxtPage class="p-16"/>
-  </div>
+  <main class="bg-red min-h-screen min-w-screen text-white">
+    <NuxtPage />
+  </main>
 </template>

@@ -68,7 +68,7 @@ const cardStyle = computed(() => ({
   <div>
     <h1 class="mb-8">{{ question.label }}</h1>
     <div
-      class="flex h-32 w-24 cursor-grab touch-none items-center justify-center rounded-xl border bg-white shadow-lg select-none active:cursor-grabbing"
+      class="mx-auto flex h-72 w-52 cursor-grab touch-none items-center justify-center rounded-xl border bg-white shadow-lg select-none active:cursor-grabbing"
       :class="isDragging ? '' : 'transition-transform duration-300'"
       :style="cardStyle"
       @pointerdown="startDrag"

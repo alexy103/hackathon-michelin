@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # Created by https://www.toptal.com/developers/gitignore/api/node,dotenv,react,jetbrains
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,dotenv,react,jetbrains
 
@@ -16,8 +14,6 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
-
-.idea/
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -122,33 +118,12 @@ fabric.properties
 .idea/**/azureSettings.xml
 
 ### Node ###
->>>>>>> 8236b63685a96cb74da1cffd2f0ba1624a66cd86
 # Logs
 logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-<<<<<<< HEAD
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-=======
 lerna-debug.log*
 .pnpm-debug.log*
 
@@ -235,6 +210,8 @@ out
 .nuxt
 dist
 
+docker_data
+
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and not Next.js
@@ -295,7 +272,3 @@ thumb
 sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/node,dotenv,react,jetbrains
-
-### Claude ###
-.claude/
->>>>>>> 8236b63685a96cb74da1cffd2f0ba1624a66cd86
