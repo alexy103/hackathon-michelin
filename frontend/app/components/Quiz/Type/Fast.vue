@@ -1,5 +1,5 @@
 <script setup>
-import { useQuestion } from "~/composable/useQuestion";
+import { useQuestion } from "~/composables/useQuestion";
 
 const props = defineProps({
   question: Object,
