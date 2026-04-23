@@ -12,7 +12,7 @@ import { BadgeSchema } from "../schemas";
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/answers/{answerId}/badges",
   tags: ["AnswerBadges"],
   summary: "Get badges for an answer",
@@ -29,7 +29,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "post",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/answers/{answerId}/badges",
   tags: ["AnswerBadges"],
   summary: "Add a badge to an answer",
@@ -55,7 +55,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "delete",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/answers/{answerId}/badges/{badgeId}",
   tags: ["AnswerBadges"],
   summary: "Remove a badge from an answer",

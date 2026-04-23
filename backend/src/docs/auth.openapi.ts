@@ -26,6 +26,7 @@ const MessageSchema = zod.object({ message: zod.string() });
 
 registry.registerPath({
   method: "post",
+  security: [{ ApiKeyAuth: [] }],
   path: "/auth/register",
   tags: ["Auth"],
   summary: "Register a new user account",
@@ -42,6 +43,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "post",
+  security: [{ ApiKeyAuth: [] }],
   path: "/auth/login",
   tags: ["Auth"],
   summary: "Login and get tokens",
@@ -58,6 +60,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "post",
+  security: [{ ApiKeyAuth: [] }],
   path: "/auth/refresh",
   tags: ["Auth"],
   summary: "Refresh access token",
@@ -80,7 +83,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "post",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/auth/logout",
   tags: ["Auth"],
   summary: "Logout and invalidate session",

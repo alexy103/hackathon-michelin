@@ -12,7 +12,7 @@ import { AnswerSchema, CreateAnswerPayloadSchema, UpdateAnswerPayloadSchema } fr
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/answers",
   tags: ["Answers"],
   summary: "Get all answers",
@@ -25,7 +25,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/answers/question/{questionId}",
   tags: ["Answers"],
   summary: "Get answers by question",
@@ -42,7 +42,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/answers/{answerId}",
   tags: ["Answers"],
   summary: "Get answer by id",
@@ -59,7 +59,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "post",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/answers",
   tags: ["Answers"],
   summary: "Create answer",
@@ -77,7 +77,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "put",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/answers/{answerId}",
   tags: ["Answers"],
   summary: "Update answer",
@@ -97,7 +97,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "delete",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/answers/{answerId}",
   tags: ["Answers"],
   summary: "Delete answer",

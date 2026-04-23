@@ -12,7 +12,7 @@ import { ActivitySchema, CreateActivityPayloadSchema, UpdateActivityPayloadSchem
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/activities",
   tags: ["Activities"],
   summary: "Get all activities",
@@ -26,7 +26,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/activities/{activityId}",
   tags: ["Activities"],
   summary: "Get activity by id",
@@ -44,7 +44,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "post",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/activities",
   tags: ["Activities"],
   summary: "Create activity",
@@ -62,7 +62,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "put",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/activities/{activityId}",
   tags: ["Activities"],
   summary: "Update activity",
@@ -82,7 +82,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "delete",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/activities/{activityId}",
   tags: ["Activities"],
   summary: "Delete activity",

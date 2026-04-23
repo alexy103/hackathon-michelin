@@ -12,7 +12,7 @@ import { BadgeSchema, CreateBadgePayloadSchema, UpdateBadgePayloadSchema } from 
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/badges",
   tags: ["Badges"],
   summary: "Get all badges",
@@ -26,7 +26,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [] }],
   path: "/badges/{badgeId}",
   tags: ["Badges"],
   summary: "Get badge by id",
@@ -44,7 +44,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "post",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/badges",
   tags: ["Badges"],
   summary: "Create badge",
@@ -62,7 +62,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "put",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/badges/{badgeId}",
   tags: ["Badges"],
   summary: "Update badge",
@@ -82,7 +82,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "delete",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/badges/{badgeId}",
   tags: ["Badges"],
   summary: "Delete badge",

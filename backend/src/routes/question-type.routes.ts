@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { requireAuth, validateSchema } from "../middlewares";
+import { requireAuth, requireApiKey, validateSchema } from "../middlewares";
 import {
   createQuestionType,
   deleteQuestionType,
@@ -11,12 +11,12 @@ import { CreateQuestionTypePayloadSchema, UpdateQuestionTypePayloadSchema } from
 
 export const questionTypeRouter: Router = Router();
 
-questionTypeRouter.get("/", requireAuth(), getQuestionTypes);
+questionTypeRouter.get("/", requireApiKey, getQuestionTypes);
 
-questionTypeRouter.get("/:typeId", requireAuth(), getQuestionTypeById);
+questionTypeRouter.get("/:typeId", requireApiKey, getQuestionTypeById);
 
-questionTypeRouter.post("/", requireAuth("admin"), validateSchema(CreateQuestionTypePayloadSchema), createQuestionType);
+questionTypeRouter.post("/", requireApiKey, requireAuth("admin"), validateSchema(CreateQuestionTypePayloadSchema), createQuestionType);
 
-questionTypeRouter.put("/:typeId", requireAuth("admin"), validateSchema(UpdateQuestionTypePayloadSchema), updateQuestionType);
+questionTypeRouter.put("/:typeId", requireApiKey, requireAuth("admin"), validateSchema(UpdateQuestionTypePayloadSchema), updateQuestionType);
 
-questionTypeRouter.delete("/:typeId", requireAuth("admin"), deleteQuestionType);
+questionTypeRouter.delete("/:typeId", requireApiKey, requireAuth("admin"), deleteQuestionType);

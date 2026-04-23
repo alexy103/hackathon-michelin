@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { requireAuth } from "../middlewares";
+import { requireAuth, requireApiKey } from "../middlewares";
 import { addBadgeToAnswer, getBadgesForAnswer, removeBadgeFromAnswer } from "../controllers";
 
 export const answerBadgeRouter: Router = Router();
 
-answerBadgeRouter.get("/:answerId/badges", requireAuth(), getBadgesForAnswer);
+answerBadgeRouter.get("/:answerId/badges", requireApiKey, getBadgesForAnswer);
 
-answerBadgeRouter.post("/:answerId/badges", requireAuth("admin"), addBadgeToAnswer);
+answerBadgeRouter.post("/:answerId/badges", requireApiKey, requireAuth("admin"), addBadgeToAnswer);
 
-answerBadgeRouter.delete("/:answerId/badges/:badgeId", requireAuth("admin"), removeBadgeFromAnswer);
+answerBadgeRouter.delete("/:answerId/badges/:badgeId", requireApiKey, requireAuth("admin"), removeBadgeFromAnswer);

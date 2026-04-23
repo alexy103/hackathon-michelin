@@ -11,7 +11,7 @@ import { RoleSchema } from "../schemas";
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/roles",
   tags: ["Roles"],
   summary: "Get all roles",
@@ -25,7 +25,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "get",
-  security: [{ BearerAuth: [] }],
+  security: [{ ApiKeyAuth: [], BearerAuth: [] }],
   path: "/roles/{roleId}",
   tags: ["Roles"],
   summary: "Get role by id",
