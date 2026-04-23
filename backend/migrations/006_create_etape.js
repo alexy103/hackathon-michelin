@@ -12,9 +12,9 @@ exports.up = (pgm) => {
   pgm.sql(`
     INSERT INTO step (number, label)
     VALUES 
-        ('1', 'Étape 1'),
-        ('2', 'Étape 2'),
-        ('3', 'Étape 3')
+        ('1', 'Ton moment'),
+        ('2', 'Ton approche'),
+        ('3', 'Ton réflexe')
   `);
 };
 
