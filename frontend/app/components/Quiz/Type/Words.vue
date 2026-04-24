@@ -131,7 +131,7 @@ const emit = defineEmits<{
   (e: "back"): void;
 }>();
 
-const DURATION = 3000;
+const DURATION = 8;
 const timeLeft = ref(DURATION);
 const hasAnswered = ref(false);
 let interval: ReturnType<typeof setInterval> | null = null;

@@ -131,7 +131,7 @@
                 >lespititsfayots-toulouse.fr</a
               >
             </div>
-            <div class="h-20 w-20 shrink-0 rounded-xl bg-white/20"></div>
+            <img src="/Fayots.png" alt="" class="h-full w-20 shrink-0" />
           </div>
         </div>
 
@@ -141,7 +141,7 @@
             LE GENTY MAGRE
           </h3>
           <div class="flex gap-4">
-            <div class="h-20 w-20 shrink-0 rounded-xl bg-white/20"></div>
+            <img src="/Genty.png" alt="" class="h-full w-20 shrink-0" />
             <div class="flex-1">
               <p class="mb-1 text-right text-xs text-white/70">
                 <span class="font-semibold text-white">Type :</span> Cuisine du
@@ -195,7 +195,7 @@
                 >hortus-toulouse.fr</a
               >
             </div>
-            <div class="h-20 w-20 shrink-0 rounded-xl bg-white/20"></div>
+            <img src="/Hortus.png" alt="" class="h-full w-20 shrink-0" />
           </div>
         </div>
 
@@ -205,7 +205,7 @@
             M BY MO BACHIR
           </h3>
           <div class="flex gap-4">
-            <div class="h-20 w-20 shrink-0 rounded-xl bg-white/20"></div>
+            <img src="/Bachir.png" alt="" class="h-full w-20 shrink-0" />
             <div class="flex-1">
               <p class="mb-1 text-right text-xs text-white/70">
                 <span class="font-semibold text-white">Type :</span> Fusion /
