@@ -287,9 +287,12 @@ const steps = computed(() => {
 const currentQuestion = computed(
   () => questions.value[currentQuestionIndex.value] ?? null,
 );
-const finished = computed(
-  () => currentQuestionIndex.value >= questions.value.length,
-);
+const finished = computed(() => {
+  if (isLoading.value) return false;
+  if (!questions.value.length) return false;
+
+  return currentQuestionIndex.value >= questions.value.length;
+});
 
 function verifyTimeout(answer: any) {
   if (!currentQuestion.value) return;
@@ -462,7 +465,7 @@ function handleEnregistrer() {
 </script>
 
 <template>
-  <div class="h-screen overflow-hidden">
+  <div>
     <Profil v-if="showProfil" />
 
     <template v-else>
